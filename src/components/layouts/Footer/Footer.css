@@ -1,5 +1,8 @@
 .footer {
-  padding: 50px 20px;
+  padding: 50px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .footer-top {
@@ -47,4 +50,27 @@
   font-size: 16px;
   color: #13131399;
   gap: 20px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-bottom > p {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1a202c;
+}
+
+.footer-bottom > div {
+  display: flex;
+  gap: 60px;
+}
+
+.footer-bottom > div > p {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1a202c;
 }

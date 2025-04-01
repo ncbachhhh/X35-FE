@@ -1,0 +1,32 @@
+.popular-car-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 40px;
+  gap: 40px;
+}
+
+.popular-car-head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.head-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #90a3bf;
+}
+
+.view-all {
+  font-weight: 600;
+  font-size: 16px;
+  color: #3563e9;
+}
+
+.popular-car-listing {
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: auto auto auto auto;
+}
+
+

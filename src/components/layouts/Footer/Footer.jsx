@@ -44,7 +44,14 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div></div>
+        <hr />
+        <div className="footer-bottom">
+          <p>©2022 MORENT. All rights reserved</p>
+          <div>
+            <p>Privacy & Policy</p>
+            <p>Terms & Condition</p>
+          </div>
+        </div>
       </div>
     </div>
   );

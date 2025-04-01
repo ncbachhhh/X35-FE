@@ -1,0 +1,80 @@
+.popular-car-card {
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  gap: 20px;
+}
+
+.car-image {
+  width: 80%;
+  margin: 50px 0;
+}
+
+.car-name-type {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.car-name {
+  font-weight: 700;
+  font-size: 20px;
+  color: #1a202c;
+}
+
+.car-type {
+  font-weight: 700;
+  font-size: 14px;
+  color: #90a3bf;
+}
+
+.car-details {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.car-details > div {
+  display: flex;
+  align-items: center;
+}
+
+.car-details > div > img {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+}
+
+.car-details > div > span {
+  font-weight: 500;
+  font-size: 14px;
+  color: #90a3bf;
+}
+
+.car-price {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.car-price > p {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.car-price > p > span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #90a3bf;
+}
+
+.fa-heart {
+  cursor: pointer;
+}

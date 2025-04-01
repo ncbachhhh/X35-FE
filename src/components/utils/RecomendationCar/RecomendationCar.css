@@ -1,0 +1,35 @@
+.recomendation-car-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 40px 0 60px 0;
+  gap: 40px;
+}
+
+.recomendation-car-head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.recomendation-car-listing {
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: auto auto auto auto;
+  gap: 32px;
+}
+
+.show-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.total-car {
+  font-weight: 500;
+  font-size: 14px;
+  color: #90a3bf;
+  position: absolute;
+  right: 0;
+}
