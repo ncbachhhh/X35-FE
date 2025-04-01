@@ -1,34 +1,44 @@
 import React from "react";
 import { Input } from "antd";
-import { SearchOutlined, SettingOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import "./Header.css";
+import ButtonUI from "../../ui/ButtonUI/ButtonUI";
 
 export default function Header() {
+  const user = false;
+  const navigate = useNavigate();
   return (
     <div className="header-container">
       <div className="header">
         <div className="header-left">
-          <div className="header-logo">
+          <div className="header-logo" onClick={navigate("/")}>
             <img src="/assets/Logo.svg" alt="logo" className="header-logo-image" />
           </div>
-          <div className="header-search">
-            <Input placeholder="Search something here" prefix={<SearchOutlined style={{ color: "#aaa" }} />} suffix={<SettingOutlined style={{ color: "#aaa" }} />} />
-          </div>
+          {user && (
+            <div className="header-search">
+              <Input placeholder="Search something here" prefix={<SearchOutlined style={{ color: "#aaa" }} />} />
+            </div>
+          )}
         </div>
-        <div className="header-right">
-          <div className="header-like header-right-item">
-            <i className="fa-solid fa-heart"></i>
+        {user ? (
+          <div className="header-right">
+            <div className="header-like header-right-item">
+              <i className="fa-solid fa-heart"></i>
+            </div>
+            <div className="header-notification header-right-item">
+              <i className="fa-solid fa-bell"></i>
+            </div>
+            <div className="header-setting header-right-item">
+              <i className="fa-solid fa-gear"></i>
+            </div>
+            <div className="header-user header-right-item">
+              <i className="fa-solid fa-user"></i>
+            </div>
           </div>
-          <div className="header-notification header-right-item">
-            <i className="fa-solid fa-bell"></i>
-          </div>
-          <div className="header-setting header-right-item">
-            <i className="fa-solid fa-gear"></i>
-          </div>
-          <div className="header-user header-right-item">
-            <i className="fa-solid fa-user"></i>
-          </div>
-        </div>
+        ) : (
+          <ButtonUI content="Get Started" onClick={() => navigate("/auth/login")} />
+        )}
       </div>
     </div>
   );

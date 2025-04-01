@@ -1,39 +1,43 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 40px;
-    background-color: #FFFFFF;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px;
+  background-color: #ffffff;
+}
+
+.header-logo {
+  cursor: pointer;
 }
 
 .header-left {
-    display: flex;
-    align-items: center;
-    gap: 150px;
+  display: flex;
+  align-items: center;
+  gap: 150px;
 }
 
 .header-search > span {
-    height: 40px;
-    width: 500px;
-    border-radius: 20px;
+  height: 40px;
+  width: 500px;
+  border-radius: 20px;
 }
 
 .header-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .header-right-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    gap: 10px;
-    cursor: pointer;
-    width: 44px;
-    height: 44px;
-    border: 1px solid #C3D4E966;
-    color: #596780;
-    font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  gap: 10px;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #c3d4e966;
+  color: #596780;
+  font-size: 20px;
 }
