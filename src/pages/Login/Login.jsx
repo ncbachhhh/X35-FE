@@ -5,6 +5,7 @@ import ButtonUI from "../../components/ui/ButtonUI/ButtonUI.jsx";
 import { NavLink } from "react-router-dom";
 
 export default function Login() {
+  // Hàm xử lý khi người dùng submit form
   const onFinish = (values) => {
     console.log("Received values:", values);
   };
@@ -49,7 +50,7 @@ export default function Login() {
         <div className="login-footer">
           <NavLink>Forgot your password</NavLink>
           <p>
-            Don't have an account? <NavLink>Sign up</NavLink>
+            Don't have an account? <NavLink to="/auth/signup">Sign up</NavLink>
           </p>
         </div>
       </Form>

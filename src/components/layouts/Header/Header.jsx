@@ -12,7 +12,7 @@ export default function Header() {
     <div className="header-container">
       <div className="header">
         <div className="header-left">
-          <div className="header-logo" onClick={navigate("/")}>
+          <div className="header-logo" onClick={() => navigate("/")}>
             <img src="/assets/Logo.svg" alt="logo" className="header-logo-image" />
           </div>
           {user && (
@@ -37,7 +37,7 @@ export default function Header() {
             </div>
           </div>
         ) : (
-          <ButtonUI content="Get Started" onClick={() => navigate("/auth/login")} />
+          <ButtonUI content="Get Started" navigate="/auth/login" />
         )}
       </div>
     </div>
