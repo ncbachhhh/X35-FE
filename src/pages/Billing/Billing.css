@@ -1,0 +1,89 @@
+.billing-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  background-color: #f6f7f9;
+  padding: 30px 40px;
+}
+
+.billing-wrapper {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.car-card-detail {
+  width: 40%;
+  background-color: white;
+}
+
+.billing-header {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.billing-header > h4 {
+  font-weight: 700;
+  font-size: 20px;
+  color: #1a202c;
+}
+
+.billing-header > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.billing-header > div > p {
+  font-weight: 500;
+  font-size: 14px;
+  color: #90a3bf;
+}
+
+.billing-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: white;
+  padding: 20px 20px 0 20px;
+  border-radius: 10px;
+}
+
+.billing-form {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.billing-form > div {
+  width: 49%;
+}
+
+.pick-up-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pick-up-form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pick-up-form-row > div {
+  width: 49%;
+}
+
+.confirm-form {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.confirm-item {
+  background-color: #f6f7f9;
+  padding: 10px;
+  border-radius: 12px;
+}
