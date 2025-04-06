@@ -11,13 +11,13 @@ export default function ButtonUI(props) {
 
   if (props.bgColor) {
     return (
-      <button className="button-ui" style={{ backgroundColor: props.bgColor }} onClick={handleClick}>
+      <button className="button-ui" style={{ backgroundColor: props.bgColor, ...props.style }} onClick={handleClick}>
         {props.content}
       </button>
     );
   } else {
     return (
-      <button className="button-ui" onClick={handleClick}>
+      <button className="button-ui" style={props.style} onClick={handleClick}>
         {props.content}
       </button>
     );

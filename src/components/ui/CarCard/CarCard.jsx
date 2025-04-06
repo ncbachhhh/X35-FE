@@ -5,6 +5,7 @@ import "./CarCard.css";
 
 export default function CarCard(props) {
   const { car } = props;
+  const url = `/category/${car.id}`; // Đường dẫn đến trang chi tiết xe
   return (
     <div className="popular-car-card">
       {/* Tên, loại xe */}
@@ -40,7 +41,7 @@ export default function CarCard(props) {
         <p>
           {FormatDollar(car.price)}/ <span>day</span>{" "}
         </p>
-        <ButtonUI content="Rent Now" />
+        <ButtonUI content="Rent Now" navigate={url}/>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import CarCard from "../../ui/CarCard/CarCard.jsx";
 import ButtonUI from "../../ui/ButtonUI/ButtonUI.jsx";
 
 export default function RecomendationCar() {
-  const totalCar = 120; 
+  const totalCar = 120;
   // Fake data
   const data = [
     {
@@ -93,7 +93,6 @@ export default function RecomendationCar() {
       {/* Tiêu đề */}
       <div className="recomendation-car-head">
         <p className="head-title">Recomendation Car</p>
-        
       </div>
 
       {/* Danh sách xe */}
@@ -103,7 +102,7 @@ export default function RecomendationCar() {
         })}
       </div>
       <div className="show-more">
-        <ButtonUI content="Show more car" />
+        <ButtonUI content="Show more car" navigate="/category" />
         <p className="total-car">{totalCar} Car</p>
       </div>
     </div>

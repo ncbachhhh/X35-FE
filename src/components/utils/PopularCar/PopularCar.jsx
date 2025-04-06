@@ -1,8 +1,11 @@
 import React from "react";
 import "./PopularCar.css";
 import CarCard from "../../ui/CarCard/CarCard.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function PopularCar() {
+  const navigate = useNavigate();
+
   // Fake data
   const data = [
     {
@@ -46,13 +49,15 @@ export default function PopularCar() {
       image: "/assets/image 8.png",
     },
   ];
-  
+
   return (
     <div className="popular-car-container">
       {/* Tiêu đề */}
       <div className="popular-car-head">
         <p className="head-title">Popular Car</p>
-        <p className="view-all">View All</p>
+        <p className="view-all" onClick={() => navigate("/category")}>
+          View All
+        </p>
       </div>
 
       {/* Danh sách xe */}
