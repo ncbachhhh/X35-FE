@@ -1,12 +1,35 @@
 import React from "react";
 import "./Billing.css";
-import { Form, Radio, Select, DatePicker, TimePicker, Row, Col, Button, Input, Checkbox } from "antd";
+import { Form, Radio, Select, DatePicker, TimePicker, Row, Col, Button, Input, Checkbox, Rate } from "antd";
 import { CITY } from "../../CONSTANTS";
+import moment from "moment";
+import { useWatch } from "antd/es/form/Form";
+import formatDollar from "../../helpers/FormatDollar";
 
 const { Option } = Select;
 
+const car = {
+  id: 12,
+  brand: "Honda",
+  name: "Civic",
+  type: "SUV",
+  tank: "80",
+  gearbox: "Automatic",
+  seats: 4,
+  price: 90,
+  image: "/assets/image 8.png",
+  rate: 4.5,
+  description: "The Honda Civic is a compact car that has been popular for decades. It is known for its reliability, fuel efficiency, and sporty design. ",
+};
+
 export default function Billing() {
   const [form] = Form.useForm();
+  const pickDate = useWatch("pick-date", form);
+  const dropDate = useWatch("drop-date", form);
+
+  // Số ngày thuê xe
+  const numDays = pickDate && dropDate ? dropDate.diff(pickDate, "days") : 0;
+
   const onFinish = (values) => {
     console.log("Form values:", values);
     // Xử lý submit ở đây
@@ -96,8 +119,14 @@ export default function Billing() {
               </div>
 
               <div>
-                <Form.Item name={"pick-date"} label="Date" rules={[{ required: true, message: "Please select your date" }]}>
-                  <DatePicker style={{ width: "100%" }} placeholder="Select your date" size="large" />
+                <Form.Item name="pick-date" label="Date" rules={[{ required: true, message: "Please select your date" }]}>
+                  <DatePicker
+                    style={{ width: "100%" }}
+                    size="large"
+                    placeholder="Select your date"
+                    // không cho chọn ngày trước hôm nay
+                    disabledDate={(current) => current && current.isBefore(moment(), "day")}
+                  />
                 </Form.Item>
               </div>
             </div>
@@ -125,8 +154,46 @@ export default function Billing() {
                 </Form.Item>
               </div>
               <div>
-                <Form.Item name={"drop-date"} label="Date" rules={[{ required: true, message: "Please select your date" }]}>
-                  <DatePicker style={{ width: "100%" }} placeholder="Select your date" size="large" />
+                <Form.Item
+                  name="drop-date"
+                  label="Date"
+                  // mỗi khi pick-date thay đổi, re-validate drop-date
+                  dependencies={["pick-date"]}
+                  rules={[
+                    { required: true, message: "Please select your date" },
+                    // custom validator: phải sau pick-date
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        const pickupDate = getFieldValue("pick-date");
+                        if (!value || !pickupDate) {
+                          return Promise.resolve();
+                        }
+                        if (value.isAfter(pickupDate, "day")) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error("Drop‑Off date must be after Pick‑Up date"));
+                      },
+                    }),
+                  ]}
+                >
+                  <DatePicker
+                    style={{ width: "100%" }}
+                    size="large"
+                    placeholder="Select your date"
+                    // không cho chọn ngày trước hôm nay, và cũng không <= pick-date
+                    disabledDate={(current) => {
+                      const pickupDate = form.getFieldValue("pick-date");
+                      // trước hôm nay thì luôn disable
+                      if (!current || current.isBefore(moment(), "day")) {
+                        return true;
+                      }
+                      // nếu đã có pick-up, thì disable luôn <= pick-up
+                      if (pickupDate && !current.isAfter(pickupDate, "day")) {
+                        return true;
+                      }
+                      return false;
+                    }}
+                  />
                 </Form.Item>
               </div>
             </div>
@@ -183,7 +250,45 @@ export default function Billing() {
           </div>
         </div>
       </Form>
-      <div className="car-card-detail"></div>
+      <div className="car-card-detail">
+        <div className="car-card-detail-header">
+          <h4>Rental Summary</h4>
+          <p>Prices may change depending on the length of the rental and the price of your rental car.</p>
+        </div>
+        <div className="car-card-detail-body">
+          <div className="car-card-detail-image">
+            <img src={car.image} alt="" />
+          </div>
+          <div className="car-card-detail-info">
+            <h4 className="car-card-detail-name">
+              {car.brand} {car.name}
+            </h4>
+            <Rate allowHalf disabled defaultValue={car.rate} style={{ fontSize: "14px" }} />
+          </div>
+        </div>
+        <hr />
+        <div className="car-card-detail-price">
+          <div>
+            <p>Price</p>
+            <p>{formatDollar(car.price)}</p>
+          </div>
+          <div>
+            <p>Rental Days</p>
+            <p>{numDays} days</p>
+          </div>
+          <div>
+            <p>Tax</p>
+            <p>10%</p>
+          </div>
+        </div>
+        <div className="car-card-detail-total">
+          <div className="car-card-detail-total-header">
+            <h4>Total Rental Price</h4>
+            <p>Overall price and includes rental discount</p>
+          </div>
+          <p>{formatDollar(numDays * car.price * 1.1)}</p>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 .billing-container {
   display: flex;
   justify-content: space-between;
+  align-items: start;
   gap: 20px;
   background-color: #f6f7f9;
   padding: 30px 40px;
@@ -14,6 +15,9 @@
 }
 
 .car-card-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   width: 40%;
   background-color: white;
 }
@@ -86,4 +90,94 @@
   background-color: #f6f7f9;
   padding: 10px;
   border-radius: 12px;
+}
+
+.car-card-detail {
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.car-card-detail-header {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 10px;
+}
+
+.car-card-detail-header > h4 {
+  font-weight: 700;
+  font-size: 20px;
+  color: #1a202c;
+}
+.car-card-detail-header > p {
+  font-weight: 500;
+  font-size: 14px;
+  color: #90a3bf;
+}
+
+.car-card-detail-body {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.car-card-detail-body > div {
+  width: 200px;
+  border-radius: 12px;
+}
+.car-card-detail-body > div > img {
+  width: 100%;
+}
+
+.car-card-detail-name {
+  font-weight: 700;
+  font-size: 32px;
+  color: #1a202c;
+}
+
+.car-card-detail-price {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.car-card-detail-price > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.car-card-detail-price > div > p:nth-child(1) {
+  font-weight: 500;
+  font-size: 14px;
+  color: #90a3bf;
+}
+
+.car-card-detail-price > div > p:nth-child(2) {
+  font-weight: 600;
+  font-size: 18px;
+  color: #1a202c;
+}
+
+.car-card-detail-total {
+  display: flex;
+  justify-content: space-between;
+}
+
+.car-card-detail-total-header > h4 {
+  font-weight: 700;
+  font-size: 20px;
+  color: #1a202c;
+}
+
+.car-card-detail-total-header > p {
+  font-weight: 500;
+  font-size: 14px;
+  color: #90a3bf;
+}
+
+.car-card-detail-total > p {
+  font-weight: 700;
+  font-size: 32px;
+  color: #1a202c;
 }
