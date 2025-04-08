@@ -15,14 +15,14 @@ export default function Signup() {
       <Form name="signup_form" layout="vertical" onFinish={onFinish} style={{ width: "80%", display: "flex", gap: "20px" }}>
         <div style={{ width: "100%" }}>
           <Form.Item
-            label="Username"
-            name="username"
+            label="Fullname"
+            name="fullname"
             rules={[
-              { required: true, message: "Please input your username!" },
-              { min: 8, message: "Username must be at least 8 characters!" },
+              { required: true, message: "Please input your fullname!" },
+              { min: 8, message: "Fullname must be at least 8 characters!" },
             ]}
           >
-            <Input placeholder="Username" style={{ height: "50px" }} />
+            <Input placeholder="Fullname" style={{ height: "50px" }} />
           </Form.Item>
           <Form.Item
             label="Email"

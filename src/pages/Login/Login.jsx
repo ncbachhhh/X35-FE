@@ -30,8 +30,8 @@ export default function Login() {
         initialValues={{ remember: false }}
         style={{ width: "43%" }}
       >
-        <Form.Item label="Username" name="username" rules={[{ required: true, message: "Please input your username!" }]}>
-          <Input placeholder="Username" style={{ height: "50px" }} />
+        <Form.Item label="Email" name="email" rules={[{ required: true, message: "Please input your email!" }]}>
+          <Input placeholder="Email" style={{ height: "50px" }} />
         </Form.Item>
 
         <Form.Item label="Password" name="password" rules={[{ required: true, message: "Please input your password!" }]}>
