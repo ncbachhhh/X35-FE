@@ -7,32 +7,41 @@ import Signup from "./pages/Signup/Signup.jsx";
 import RentCar from "./pages/RentCar/RentCar.jsx";
 import CarDetails from "./pages/CarDetails/CarDetails.jsx";
 import Billing from "./pages/Billing/Billing.jsx";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
+import { NotificationProvider } from "./contexts/notification.context.js";
+
+// Thông báo
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          {/* Đăng nhập */}
-          <Route path="/auth/login" element={<Login />} />
+    <NotificationProvider>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            {/* Đăng nhập */}
+            <Route path="/auth/login" element={<Login />} />
 
-          {/* Đăng ký */}
-          <Route path="/auth/signup" element={<Signup />} />
+            {/* Đăng ký */}
+            <Route path="/auth/signup" element={<Signup />} />
 
-          {/* Home */}
-          <Route path="" element={<Home />} />
+            {/* Quên mật khẩu */}
+            <Route path="/auth/forgot-password" element={<ForgotPassword />} />
 
-          {/* Thuê xe */}
-          <Route path="/category" element={<RentCar />} />
+            {/* Home */}
+            <Route path="" element={<Home />} />
 
-          {/* Chi tiết xe */}
-          <Route path="/category/:id" element={<CarDetails />} />
+            {/* Thuê xe */}
+            <Route path="/category" element={<RentCar />} />
 
-          {/* Thanh toán */}
-          <Route path="/payment/:id" element={<Billing />} />
-        </Route>
-      </Routes>
-    </div>
+            {/* Chi tiết xe */}
+            <Route path="/category/:id" element={<CarDetails />} />
+
+            {/* Thanh toán */}
+            <Route path="/payment/:id" element={<Billing />} />
+          </Route>
+        </Routes>
+      </div>
+    </NotificationProvider>
   );
 }
 

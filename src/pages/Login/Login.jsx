@@ -48,7 +48,7 @@ export default function Login() {
           </Button>
         </Form.Item>
         <div className="login-footer">
-          <NavLink>Forgot your password</NavLink>
+          <NavLink to="/auth/forgot-password">Forgot your password</NavLink>
           <p>
             Don't have an account? <NavLink to="/auth/signup">Sign up</NavLink>
           </p>
