@@ -16,16 +16,16 @@ export default function ForgotPassword() {
     const fakeCode = "123456"; // Giả lập mã xác minh gửi email
     setEmail(values.email);
     setSentCode(fakeCode);
-    api.success({ message: "Thành công", description: `Mã xác minh đã được gửi đến email: ${values.email}` });
+    api.success({ message: "Thành công", description: `Mã xác minh đã được gửi đến email: ${values.email}`, duration: 1.5 });
     setStep(2);
   };
 
   const verifyCode = (values) => {
     if (values.code === sentCode) {
-      api.success({ message: "Thành công", description: "Xác minh thành công!" });
+      api.success({ message: "Thành công", description: "Xác minh thành công!", duration: 1.5 });
       navigate("/abc");
     } else {
-      api.error({ message: "Thất bại", description: "Mã xác minh không chính xác!" });
+      api.error({ message: "Thất bại", description: "Mã xác minh không chính xác!", duration: 1.5 });
     }
   };
 

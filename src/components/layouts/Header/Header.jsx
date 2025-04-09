@@ -4,9 +4,10 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
 import ButtonUI from "../../ui/ButtonUI/ButtonUI";
+import { useAuth } from "../../../contexts/auth.context";
 
 export default function Header() {
-  const user = false;
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
   return (
     <div className="header-container">
@@ -15,30 +16,31 @@ export default function Header() {
           <div className="header-logo" onClick={() => navigate("/")}>
             <img src="/assets/Logo.svg" alt="logo" className="header-logo-image" />
           </div>
-          {user && (
+          {!loading && user && (
             <div className="header-search">
               <Input placeholder="Search something here" prefix={<SearchOutlined style={{ color: "#aaa" }} />} />
             </div>
           )}
         </div>
-        {user ? (
-          <div className="header-right">
-            <div className="header-like header-right-item">
-              <i className="fa-solid fa-heart"></i>
+        {!loading &&
+          (user ? (
+            <div className="header-right">
+              <div className="header-like header-right-item">
+                <i className="fa-solid fa-heart"></i>
+              </div>
+              <div className="header-notification header-right-item">
+                <i className="fa-solid fa-bell"></i>
+              </div>
+              <div className="header-setting header-right-item">
+                <i className="fa-solid fa-gear"></i>
+              </div>
+              <div className="header-user header-right-item">
+                <i className="fa-solid fa-user"></i>
+              </div>
             </div>
-            <div className="header-notification header-right-item">
-              <i className="fa-solid fa-bell"></i>
-            </div>
-            <div className="header-setting header-right-item">
-              <i className="fa-solid fa-gear"></i>
-            </div>
-            <div className="header-user header-right-item">
-              <i className="fa-solid fa-user"></i>
-            </div>
-          </div>
-        ) : (
-          <ButtonUI content="Get Started" navigate="/auth/login" />
-        )}
+          ) : (
+            <ButtonUI content="Get Started" navigate="/auth/login" />
+          ))}
       </div>
     </div>
   );

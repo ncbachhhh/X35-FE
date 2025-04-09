@@ -9,38 +9,44 @@ import CarDetails from "./pages/CarDetails/CarDetails.jsx";
 import Billing from "./pages/Billing/Billing.jsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
 import { NotificationProvider } from "./contexts/notification.context.js";
-
-// Thông báo
+import { AuthProvider } from "./contexts/auth.context.js";
+import VerifyEmail from "./pages/VerifyEmail/VerifyEmail.jsx";
 
 function App() {
   return (
     <NotificationProvider>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            {/* Đăng nhập */}
-            <Route path="/auth/login" element={<Login />} />
+      <AuthProvider>
+        <div className="App">
+          <Routes>
+            {/* Validate Email */}
+            <Route path="/verify-email" element={<VerifyEmail />} />
 
-            {/* Đăng ký */}
-            <Route path="/auth/signup" element={<Signup />} />
+            {/* Layouts */}
+            <Route path="/" element={<Layout />}>
+              {/* Đăng nhập */}
+              <Route path="/auth/login" element={<Login />} />
 
-            {/* Quên mật khẩu */}
-            <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+              {/* Đăng ký */}
+              <Route path="/auth/signup" element={<Signup />} />
 
-            {/* Home */}
-            <Route path="" element={<Home />} />
+              {/* Quên mật khẩu */}
+              <Route path="/auth/forgot-password" element={<ForgotPassword />} />
 
-            {/* Thuê xe */}
-            <Route path="/category" element={<RentCar />} />
+              {/* Home */}
+              <Route path="" element={<Home />} />
 
-            {/* Chi tiết xe */}
-            <Route path="/category/:id" element={<CarDetails />} />
+              {/* Thuê xe */}
+              <Route path="/category" element={<RentCar />} />
 
-            {/* Thanh toán */}
-            <Route path="/payment/:id" element={<Billing />} />
-          </Route>
-        </Routes>
-      </div>
+              {/* Chi tiết xe */}
+              <Route path="/category/:id" element={<CarDetails />} />
+
+              {/* Thanh toán */}
+              <Route path="/payment/:id" element={<Billing />} />
+            </Route>
+          </Routes>
+        </div>
+      </AuthProvider>
     </NotificationProvider>
   );
 }

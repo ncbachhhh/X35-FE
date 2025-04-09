@@ -1,13 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
 import { NavLink } from "react-router-dom";
 import ButtonUI from "../../components/ui/ButtonUI/ButtonUI.jsx";
 import "./Signup.css";
+import { useNotification } from "../../contexts/notification.context.js";
+import UserAPI from "../../APIs/user.api.js";
+import Loading from "../../components/ui/Loading/Loading.jsx";
 
 export default function Signup() {
+  const { api } = useNotification();
+  const [loading, setLoading] = useState(false);
+
   // Hàm xử lý khi người dùng submit form
-  const onFinish = (values) => {
-    console.log("Received values:", values);
+  const onFinish = async (values) => {
+    setLoading(true);
+    const response = await UserAPI.register(values);
+
+    setLoading(false);
+    if (response.isSuccess) {
+      // Đăng ký thành công
+      api.success({
+        message: "Register successful",
+        description: response.message,
+        duration: 1.5,
+      });
+
+      // Chuyển hướng
+      window.location.href = "/auth/login";
+    } else {
+      // Đăng ký thất bại, hiển thị thông báo lỗi
+
+      api.error({
+        message: "Register failed",
+        description: response.message,
+        duration: 1.5,
+      });
+    }
   };
   return (
     <div className="signup-container">
@@ -77,7 +105,7 @@ export default function Signup() {
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" style={{ width: "100%", height: "50px", marginTop: "30px" }}>
-              Sign Up
+              Sign Up {loading && <Loading />}
             </Button>
           </Form.Item>
         </div>

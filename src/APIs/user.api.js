@@ -4,6 +4,7 @@ import axios from "axios";
 const API_URL = {
   LOGIN: `${DOMAIN}/auth/user/login`,
   REGISTER: `${DOMAIN}/auth/user/register`,
+  GET_PROFILE: `${DOMAIN}/auth/user/get-profile`,
 };
 
 const UserAPI = {
@@ -50,4 +51,23 @@ const UserAPI = {
       };
     }
   },
+
+  getProfile: async () => {
+    try {
+      const response = await axios.get(API_URL.GET_PROFILE);
+      return {
+        isSuccess: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        isSuccess: false,
+        data: null,
+        message: error.response.data.message,
+      };
+    }
+  },
 };
+
+export default UserAPI;
