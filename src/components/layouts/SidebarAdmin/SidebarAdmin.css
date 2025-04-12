@@ -1,0 +1,8 @@
+.sidebar-admin-container {
+  position: fixed;
+  top: calc(70px + 1px);
+  left: 0;
+  height: calc(100vh - 70px - 1px);
+  width: 250px;
+  background-color: white;
+}

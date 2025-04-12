@@ -11,6 +11,8 @@ import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
 import { NotificationProvider } from "./contexts/notification.context.js";
 import { AuthProvider } from "./contexts/auth.context.js";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail.jsx";
+import LayoutAdmin from "./components/layouts/LayoutAdmin.jsx";
+import HomeAdmin from "./pages/Admin/HomeAdmin/HomeAdmin.jsx";
 
 function App() {
   return (
@@ -44,6 +46,12 @@ function App() {
               {/* Thanh toán */}
               <Route path="/payment/:id" element={<Billing />} />
             </Route>
+
+            <Route path="/admin" element={<LayoutAdmin />} >
+              <Route path="" element={<HomeAdmin />} />
+            </Route>
+
+            <Route path="*" element={<h1>404 Not Found</h1>} />
           </Routes>
         </div>
       </AuthProvider>

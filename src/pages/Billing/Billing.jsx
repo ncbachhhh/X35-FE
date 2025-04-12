@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Billing.css";
 import { Form, Radio, Select, DatePicker, TimePicker, Row, Col, Button, Input, Checkbox, Rate } from "antd";
 import { CITY } from "../../CONSTANTS";
 import moment from "moment";
-import { useWatch } from "antd/es/form/Form";
 import formatDollar from "../../helpers/FormatDollar";
 
 const { Option } = Select;
@@ -24,11 +23,26 @@ const car = {
 
 export default function Billing() {
   const [form] = Form.useForm();
-  const pickDate = useWatch("pick-date", form);
-  const dropDate = useWatch("drop-date", form);
 
-  // Số ngày thuê xe
-  const numDays = pickDate && dropDate ? dropDate.diff(pickDate, "days") : 0;
+  const [durationInHours, setDurationInHours] = useState(null);
+
+  const calculateDuration = () => {
+    const values = form.getFieldsValue();
+    const { "pick-date": pickDate, "pick-time": pickTime, "drop-date": dropDate, "drop-time": dropTime } = values;
+
+    if (pickDate && pickTime && dropDate && dropTime) {
+      const pickup = pickDate.clone().hour(pickTime.hour()).minute(pickTime.minute());
+      const dropoff = dropDate.clone().hour(dropTime.hour()).minute(dropTime.minute());
+      const diff = dropoff.diff(pickup, "minutes");
+
+      if (diff > 0) {
+        const hours = (diff / 60).toFixed(2);
+        setDurationInHours(hours);
+      } else {
+        setDurationInHours(null);
+      }
+    }
+  };
 
   const onFinish = (values) => {
     console.log("Form values:", values);
@@ -114,19 +128,13 @@ export default function Billing() {
                 </Form.Item>
 
                 <Form.Item name={"pick-time"} label="Time" rules={[{ required: true, message: "Please select your time" }]}>
-                  <TimePicker style={{ width: "100%" }} placeholder="Select your time" size="large" />
+                  <TimePicker style={{ width: "100%" }} placeholder="Select your time" size="large" onChange={calculateDuration} />
                 </Form.Item>
               </div>
 
               <div>
                 <Form.Item name="pick-date" label="Date" rules={[{ required: true, message: "Please select your date" }]}>
-                  <DatePicker
-                    style={{ width: "100%" }}
-                    size="large"
-                    placeholder="Select your date"
-                    // không cho chọn ngày trước hôm nay
-                    disabledDate={(current) => current && current.isBefore(moment(), "day")}
-                  />
+                  <DatePicker style={{ width: "100%" }} size="large" placeholder="Select your date" disabledDate={(current) => current && current.isBefore(moment(), "day")} onChange={calculateDuration} />
                 </Form.Item>
               </div>
             </div>
@@ -150,18 +158,16 @@ export default function Billing() {
                 </Form.Item>
 
                 <Form.Item name={"drop-time"} label="Time" rules={[{ required: true, message: "Please select your time" }]}>
-                  <TimePicker style={{ width: "100%" }} placeholder="Select your time" size="large" />
+                  <TimePicker style={{ width: "100%" }} placeholder="Select your time" size="large" onChange={calculateDuration} />
                 </Form.Item>
               </div>
               <div>
                 <Form.Item
                   name="drop-date"
                   label="Date"
-                  // mỗi khi pick-date thay đổi, re-validate drop-date
                   dependencies={["pick-date"]}
                   rules={[
                     { required: true, message: "Please select your date" },
-                    // custom validator: phải sau pick-date
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         const pickupDate = getFieldValue("pick-date");
@@ -180,14 +186,12 @@ export default function Billing() {
                     style={{ width: "100%" }}
                     size="large"
                     placeholder="Select your date"
-                    // không cho chọn ngày trước hôm nay, và cũng không <= pick-date
+                    onChange={calculateDuration}
                     disabledDate={(current) => {
                       const pickupDate = form.getFieldValue("pick-date");
-                      // trước hôm nay thì luôn disable
                       if (!current || current.isBefore(moment(), "day")) {
                         return true;
                       }
-                      // nếu đã có pick-up, thì disable luôn <= pick-up
                       if (pickupDate && !current.isAfter(pickupDate, "day")) {
                         return true;
                       }
@@ -270,11 +274,11 @@ export default function Billing() {
         <div className="car-card-detail-price">
           <div>
             <p>Price</p>
-            <p>{formatDollar(car.price)}</p>
+            <p>{formatDollar(car.price)}/days</p>
           </div>
           <div>
             <p>Rental Days</p>
-            <p>{numDays} days</p>
+            <p>{(durationInHours / 24).toFixed(2)} days</p>
           </div>
           <div>
             <p>Tax</p>
@@ -286,7 +290,7 @@ export default function Billing() {
             <h4>Total Rental Price</h4>
             <p>Overall price and includes rental discount</p>
           </div>
-          <p>{formatDollar(numDays * car.price * 1.1)}</p>
+          <p>{formatDollar((durationInHours / 24) * car.price * 1.1)}</p>
         </div>
       </div>
     </div>
