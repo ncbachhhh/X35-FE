@@ -131,7 +131,6 @@ export default function RentCar() {
   const [current, setCurrent] = useState(1);
   const onChange = (page, pageSize) => {
     setCurrent(page);
-    console.log("Current page:", page, "Page size:", pageSize);
   };
 
   return (

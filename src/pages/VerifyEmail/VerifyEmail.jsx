@@ -2,9 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { DOMAIN } from "../../CONSTANTS";
 import { useNotification } from "../../contexts/notification.context";
-import { message } from "antd";
 import { useNavigate } from "react-router-dom";
-import { duration } from "moment";
 
 export default function VerifyEmail() {
   const { api } = useNotification();

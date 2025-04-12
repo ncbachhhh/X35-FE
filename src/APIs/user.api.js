@@ -5,6 +5,8 @@ const API_URL = {
   LOGIN: `${DOMAIN}/auth/user/login`,
   REGISTER: `${DOMAIN}/auth/user/register`,
   GET_PROFILE: `${DOMAIN}/auth/user/get-profile`,
+  SEND_CODE_FORGOT_PASSWORD: `${DOMAIN}/auth/send-code-forgot-password`,
+  VERIFY_CODE_FORGOT_PASSWORD: `${DOMAIN}/auth/verify-code-and-reset-password`,
 };
 
 const UserAPI = {
@@ -58,6 +60,40 @@ const UserAPI = {
       return {
         isSuccess: true,
         data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        isSuccess: false,
+        data: null,
+        message: error.response.data.message,
+      };
+    }
+  },
+
+  sendForgotPasswordCode: async (data) => {
+    try {
+      const response = await axios.post(API_URL.SEND_CODE_FORGOT_PASSWORD, data);
+      return {
+        isSuccess: true,
+        data: response.data.token,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        isSuccess: false,
+        data: null,
+        message: error.response.data.message,
+      };
+    }
+  },
+
+  verifyCodeAndChangePassword: async (data) => {
+    try {
+      const response = await axios.post(API_URL.VERIFY_CODE_FORGOT_PASSWORD, data);
+      return {
+        isSuccess: true,
+        data: response.data.user,
         message: response.data.message,
       };
     } catch (error) {

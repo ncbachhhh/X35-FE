@@ -181,7 +181,7 @@ export default function CarDetails() {
               </p>
               <p>{formatDollar(car.price * 1.1)}</p>
             </div>
-            <ButtonUI content="Rent Now" style={{ height: "100%", width: "200px" }} />
+            <ButtonUI content="Rent Now" style={{ height: "100%", width: "200px" }} navigate={`/payment/${car.id}`} />
           </div>
         </div>
       </div>
