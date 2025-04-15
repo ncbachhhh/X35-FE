@@ -13,6 +13,7 @@ import { AuthProvider } from "./contexts/auth.context.js";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail.jsx";
 import LayoutAdmin from "./components/layouts/LayoutAdmin.jsx";
 import HomeAdmin from "./pages/Admin/HomeAdmin/HomeAdmin.jsx";
+import CreateRent from "./pages/Admin/CreateRent/CreateRent.jsx";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
 
             <Route path="/admin" element={<LayoutAdmin />} >
               <Route path="" element={<HomeAdmin />} />
+              <Route path="create-rent" element={<CreateRent />} />
             </Route>
 
             <Route path="*" element={<h1>404 Not Found</h1>} />

@@ -1,8 +1,6 @@
 .outlet-admin {
-  position: fixed;
-  top: calc(70px + 1px);
-  left: 250px;
-  width: calc(100vw - 250px);
-  height: calc(100vh - 70px - 1px);
+  width: 100vw;
+  height: 100vh;
+  padding: calc(70px + 5px) 0px 0px 260px;
   background-color: #f6f7f9;
 }
