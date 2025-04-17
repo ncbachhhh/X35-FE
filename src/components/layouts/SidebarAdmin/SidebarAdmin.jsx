@@ -10,11 +10,11 @@ export default function SidebarAdmin({ page, setPage }) {
   };
   return (
     <div className="sidebar-admin-container">
-      <div className="sidebar-admin-item" style={{ color: page === 1 ? "#3563E9" : "#000", scale: page === 1 && "1.05" }} onClick={() => handleClick(1, '/admin')}>
+      <div className="sidebar-admin-item" style={{ color: page === 1 ? "white" : "#90A3BF", scale: page === 1 && "1.05", backgroundColor: page === 1 && "#3563E9" }} onClick={() => handleClick(1, '/admin')}>
         <i className="fa-solid fa-list"></i>
         <span className="sidebar-admin-title">Dashboard</span>
       </div>
-      <div className="sidebar-admin-item" style={{ color: page === 2 ? "#3563E9" : "#000", scale: page === 2 && "1.05" }} onClick={() => handleClick(2, '/admin/create-rent')}>
+      <div className="sidebar-admin-item" style={{ color: page === 2 ? "white" : "#90A3BF", scale: page === 2 && "1.05", backgroundColor: page === 2 && "#3563E9" }} onClick={() => handleClick(2, '/admin/create-rent')}>
         <i class="fa-solid fa-pen-to-square"></i>
         <span>Create Rent</span>
       </div>

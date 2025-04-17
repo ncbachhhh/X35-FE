@@ -26,7 +26,7 @@ export default function FilterSidebar() {
   const [selectedCapacity, setSelectedCapacity] = useState([]);
   const [price, setPrice] = useState(100);
 
-  useEffect(() => {
+  useEffect(() => { 
     console.log("Selected Type:", selectedType);
     console.log("Selected Capacity:", selectedCapacity);
     console.log("Selected Price:", price);

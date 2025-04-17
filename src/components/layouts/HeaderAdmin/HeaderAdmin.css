@@ -6,4 +6,5 @@
     width: 100vw;
     height: 70px;
     background-color: white;
+    z-index: 1000;
 }
