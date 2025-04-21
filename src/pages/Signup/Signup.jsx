@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Form, Input, Button } from "antd";
 import { NavLink } from "react-router-dom";
-import ButtonUI from "../../components/ui/ButtonUI/ButtonUI.jsx";
 import "./Signup.css";
 import { useNotification } from "../../contexts/notification.context.js";
 import UserAPI from "../../APIs/user.api.js";
@@ -10,6 +9,15 @@ import Loading from "../../components/ui/Loading/Loading.jsx";
 export default function Signup() {
   const { api } = useNotification();
   const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
+
+  // Hàm xử lý trim trực tiếp
+  const handleTrim = (e, fieldName) => {
+    const value = e.target.value;
+    form.setFieldsValue({
+      [fieldName]: value.trim(),
+    });
+  };
 
   // Hàm xử lý khi người dùng submit form
   const onFinish = async (values) => {
@@ -40,7 +48,7 @@ export default function Signup() {
   return (
     <div className="signup-container">
       <h1 className="signup-header">SignUp</h1>
-      <Form name="signup_form" layout="vertical" onFinish={onFinish} style={{ width: "80%", display: "flex", gap: "20px" }}>
+      <Form form={form} name="signup_form" layout="vertical" onFinish={onFinish} style={{ width: "80%", display: "flex", gap: "20px" }}>
         <div style={{ width: "100%" }}>
           <Form.Item
             label="Fullname"
@@ -50,7 +58,7 @@ export default function Signup() {
               { min: 8, message: "Fullname must be at least 8 characters!" },
             ]}
           >
-            <Input placeholder="Fullname" style={{ height: "50px" }} />
+            <Input placeholder="Fullname" style={{ height: "50px" }} onBlur={(e) => handleTrim(e, "fullname")} />
           </Form.Item>
           <Form.Item
             label="Email"
@@ -60,11 +68,11 @@ export default function Signup() {
               { type: "email", message: "Please enter a valid email!" },
             ]}
           >
-            <Input placeholder="Email" style={{ height: "50px" }} />
+            <Input placeholder="Email" style={{ height: "50px" }} onBlur={(e) => handleTrim(e, "email")} />
           </Form.Item>
 
           <Form.Item label="Address" name="address" rules={[{ required: true, message: "Please input your address!" }]}>
-            <Input placeholder="Address" style={{ height: "50px" }} />
+            <Input placeholder="Address" style={{ height: "50px" }} onBlur={(e) => handleTrim(e, "address")} />
           </Form.Item>
         </div>
 
@@ -82,7 +90,7 @@ export default function Signup() {
             ]}
             hasFeedback
           >
-            <Input.Password placeholder="Password" style={{ height: "50px" }} />
+            <Input.Password placeholder="Password" style={{ height: "50px" }} onBlur={(e) => handleTrim(e, "password")} />
           </Form.Item>
           <Form.Item
             label="Re-Password"
@@ -101,11 +109,11 @@ export default function Signup() {
               }),
             ]}
           >
-            <Input.Password placeholder="Re-Password" style={{ height: "50px" }} />
+            <Input.Password placeholder="Re-Password" style={{ height: "50px" }} onBlur={(e) => handleTrim(e, "confirm")} />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" style={{ width: "100%", height: "50px", marginTop: "30px" }}>
-              Sign Up {loading && <Loading />}
+              Sign Up {loading ? <Loading /> : ""}
             </Button>
           </Form.Item>
         </div>
