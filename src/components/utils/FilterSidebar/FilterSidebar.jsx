@@ -1,37 +1,32 @@
 import React, { useEffect, useState } from "react";
 import "./FilterSidebar.css";
-import { Checkbox, Slider } from "antd";
+import { Checkbox, Select, Slider } from "antd";
 import formatDollar from "../../../helpers/FormatDollar";
 
 // Tùy chỉnh danh sách tùy chọn cho TYPE
 const typeOptions = [
-  { label: "Sport (10)", value: "Sport" },
-  { label: "SUV (12)", value: "SUV" },
-  { label: "MPV (16)", value: "MPV" },
-  { label: "Sedan (20)", value: "Sedan" },
-  { label: "Coupe (14)", value: "Coupe" },
-  { label: "Hatchback (14)", value: "Hatchback" },
+  { label: "Sport", value: "Sport" },
+  { label: "SUV", value: "SUV" },
+  { label: "MPV", value: "MPV" },
+  { label: "Sedan", value: "Sedan" },
+  { label: "Coupe", value: "Coupe" },
+  { label: "Hatchback", value: "Hatchback" },
 ];
 
 // Tùy chỉnh danh sách tùy chọn cho CAPACITY
 const capacityOptions = [
-  { label: "2 Person (10)", value: "2" },
-  { label: "4 Person (14)", value: "4" },
-  { label: "6 Person (12)", value: "6" },
-  { label: "8 or More (16)", value: "8plus" },
+  { label: "2 Person", value: "2" },
+  { label: "4 Person", value: "4" },
+  { label: "6 Person", value: "6" },
+  { label: "8 or More", value: "8plus" },
 ];
 
-export default function FilterSidebar() {
-  const [selectedType, setSelectedType] = useState([]);
-  const [selectedCapacity, setSelectedCapacity] = useState([]);
-  const [price, setPrice] = useState(100);
+const gearboxOptions = [
+  { label: "Automatic", value: "Automatic" },
+  { label: "Manual", value: "Manual" },
+];
 
-  useEffect(() => { 
-    console.log("Selected Type:", selectedType);
-    console.log("Selected Capacity:", selectedCapacity);
-    console.log("Selected Price:", price);
-  }, [selectedType, selectedCapacity, price]);
-
+export default function FilterSidebar({ sortBy, setSortBy, sortOrder, setSortOrder, selectedType, setSelectedType, selectedCapacity, setSelectedCapacity, selectedGearbox, setSelectedGearbox, price, setPrice }) {
   const handleTypeChange = (checkedValues) => {
     setSelectedType(checkedValues);
   };
@@ -44,8 +39,44 @@ export default function FilterSidebar() {
     setPrice(value);
   };
 
+  const handleSortByChange = (value) => {
+    setSortBy(value);
+  };
+
+  const handleSortOrderChange = (value) => {
+    setSortOrder(value);
+  };
+
+  const handleGearboxChange = (checkedValues) => {
+    setSelectedGearbox(checkedValues);
+  };
+
   return (
     <div className="side-bar-container">
+      {/* SORT BY */}
+      <div className="side-bar-item">
+        <h4>SORT BY</h4>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <Select
+            style={{ flex: 1 }}
+            value={sortBy}
+            onChange={handleSortByChange}
+            options={[
+              { label: "Price", value: "price" },
+              { label: "Created At", value: "createdAt" },
+            ]}
+          />
+          <Select
+            style={{ width: 120 }}
+            value={sortOrder}
+            onChange={handleSortOrderChange}
+            options={[
+              { label: "Ascending", value: "asc" },
+              { label: "Descending", value: "desc" },
+            ]}
+          />
+        </div>
+      </div>
       {/* TYPE */}
       <div className="side-bar-item">
         <h4>TYPE</h4>
@@ -58,12 +89,18 @@ export default function FilterSidebar() {
         <Checkbox.Group className="filter" options={capacityOptions} value={selectedCapacity} onChange={handleCapacityChange} />
       </div>
 
+      {/* GEARBOX */}
+      <div className="side-bar-item">
+        <h4>GEARBOX</h4>
+        <Checkbox.Group className="filter" options={gearboxOptions} value={selectedGearbox} onChange={handleGearboxChange} />
+      </div>
+
       {/* PRICE */}
       <div className="side-bar-item">
         <h4>PRICE</h4>
         <Slider
           min={0}
-          max={200} // tùy chỉnh max nếu muốn
+          max={1000} // tùy chỉnh max nếu muốn
           value={price}
           onChange={handlePriceChange}
         />

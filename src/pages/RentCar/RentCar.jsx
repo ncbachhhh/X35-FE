@@ -1,156 +1,86 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./RentCar.css";
 import FilterSidebar from "../../components/utils/FilterSidebar/FilterSidebar.jsx";
 import CarCard from "../../components/ui/CarCard/CarCard.jsx";
 import { Pagination } from "antd";
-
-const data = [
-  {
-    id: 1,
-    name: "CR-V",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 80,
-    image: "/assets/image 7.png",
-  },
-  {
-    id: 2,
-    name: "Civic",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 20,
-    image: "/assets/image 8.png",
-  },
-  {
-    id: 3,
-    name: "CR-V",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 40,
-    image: "/assets/image 7.png",
-  },
-  {
-    id: 4,
-    name: "Civic",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 90,
-    image: "/assets/image 8.png",
-  },
-  {
-    id: 5,
-    name: "CR-V",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 80,
-    image: "/assets/image 7.png",
-  },
-  {
-    id: 6,
-    name: "Civic",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 20,
-    image: "/assets/image 8.png",
-  },
-  {
-    id: 7,
-    name: "CR-V",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 40,
-    image: "/assets/image 7.png",
-  },
-  {
-    id: 8,
-    name: "Civic",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 90,
-    image: "/assets/image 8.png",
-  },
-  {
-    id: 9,
-    name: "Civic",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 90,
-    image: "/assets/image 8.png",
-  },
-  {
-    id: 10,
-    name: "CR-V",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 40,
-    image: "/assets/image 7.png",
-  },
-  {
-    id: 11,
-    name: "Civic",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 90,
-    image: "/assets/image 8.png",
-  },
-  {
-    id: 12,
-    name: "Civic",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 90,
-    image: "/assets/image 8.png",
-  },
-];
+import CarAPI from "../../APIs/car.api.js";
+import { useLocation } from "react-router-dom";
 
 export default function RentCar() {
+  const urlParams = new URLSearchParams(window.location.search);
+
   const [current, setCurrent] = useState(1);
-  const onChange = (page, pageSize) => {
+  const [cars, setCars] = useState([]);
+  const [keyword, setKeyword] = useState(urlParams.get("keyword") || "");
+  const [sortBy, setSortBy] = useState("price");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [selectedType, setSelectedType] = useState([]);
+  const [selectedCapacity, setSelectedCapacity] = useState([]);
+  const [selectedGearbox, setSelectedGearbox] = useState([]);
+  const [price, setPrice] = useState(1000);
+  const [total, setTotal] = useState(0);
+
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+
+  const onChange = (page) => {
     setCurrent(page);
+  };
+
+  const location = useLocation();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const newKeyword = params.get("keyword") || "";
+    setKeyword(newKeyword);
+  }, [location.search]);
+
+  // Debounce keyword
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setDebouncedQuery(keyword);
+    }, 500);
+    return () => clearTimeout(timeoutId);
+  }, [keyword]);
+
+  // Gọi API khi có thay đổi
+  useEffect(() => {
+    getCars();
+  }, [debouncedQuery, selectedType, selectedCapacity, price, sortBy, sortOrder, selectedGearbox, current]);
+
+  // Gọi API function
+  const getCars = async () => {
+    const query = {
+      keyword: debouncedQuery,
+      type: selectedType,
+      capacity: selectedCapacity,
+      gearbox: selectedGearbox,
+      price: price,
+      sortBy: `${sortBy}:${sortOrder}`,
+      page: current,
+    };
+
+    const response = await CarAPI.getCarListing(query);
+
+    setCars(response.data.cars);
+    setTotal(response.data.total);
   };
 
   return (
     <div className="rent-container">
-      <FilterSidebar />
+      <FilterSidebar sortBy={sortBy} setSortBy={setSortBy} sortOrder={sortOrder} setSortOrder={setSortOrder} selectedType={selectedType} setSelectedType={setSelectedType} selectedCapacity={selectedCapacity} setSelectedCapacity={setSelectedCapacity} selectedGearbox={selectedGearbox} setSelectedGearbox={setSelectedGearbox} price={price} setPrice={setPrice} />
       <div className="rent-listing-container">
-        <div className="car-listing">
-          {data.map((car) => {
-            return <CarCard car={car} key={car.id} />;
-          })}
+        <div className="car-listing" style={cars.length === 0 ? {display: 'flex', justifyContent: 'center'} : {}}>
+          {cars.length > 0 ? (
+            cars.map((car) => {
+              return <CarCard car={car} key={car._id} />;
+            })
+          ) : (
+            <div className="no-car-found">
+              <p>Sorry, we couldn't find any cars matching your criteria.</p>
+            </div>
+          )}
         </div>
         <div>
-          <Pagination
-            current={current}
-            total={100}
-            pageSize={10}
-            onChange={onChange}
-            showSizeChanger={false} // Ẩn tùy chọn thay đổi kích thước trang
-            style={{ margin: "0 0 40px 0" }}
-          />
+          <Pagination current={current} onChange={onChange} total={total} pageSize={12} showSizeChanger={false} style={{ margin: "0 0 40px 0" }} />
         </div>
       </div>
     </div>

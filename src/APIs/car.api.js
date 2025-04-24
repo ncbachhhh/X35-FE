@@ -6,6 +6,8 @@ const API_URL = {
   GET_BRAND: `${DOMAIN}/get/car_brand`,
   GET_TYPE: `${DOMAIN}/get/car_type`,
   GET_GEARBOX: `${DOMAIN}/get/car_gearbox`,
+  GET_CAR_LISTING: `${DOMAIN}/get/cars`,
+  LIKE_CAR: `${DOMAIN}/like/car`,
 };
 
 const CarAPI = {
@@ -90,6 +92,39 @@ const CarAPI = {
       };
     }
   },
+  getCarListing: async (data) => {
+    try {
+      const response = await axios.post(API_URL.GET_CAR_LISTING, data);
+      return {
+        isSuccess: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        isSuccess: false,
+        data: null,
+        message: error.response.data.message,
+      };
+    }
+  },
+  likeCar: async (data) => {
+    try {
+      const response = await axios.post(API_URL.LIKE_CAR, data);
+      return {
+        isSuccess: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        isSuccess: false,
+        data: null,
+        message: error.response.data.message,
+      };
+    }
+  },
+
 };
 
 export default CarAPI;

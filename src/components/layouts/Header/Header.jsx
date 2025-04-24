@@ -9,6 +9,18 @@ import { useAuth } from "../../../contexts/auth.context";
 export default function Header() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      const query = e.target.value;
+      if (query === "") {
+        navigate("/category");
+      }
+      if (query) {
+        navigate(`/category?keyword=${query}`);
+      }
+    }
+  };
   return (
     <div className="header-container">
       <div className="header">
@@ -18,7 +30,7 @@ export default function Header() {
           </div>
           {!loading && user && (
             <div className="header-search">
-              <Input placeholder="Search something here" prefix={<SearchOutlined style={{ color: "#aaa" }} />} />
+              <Input placeholder="Search something here"  onKeyDown={handleSearch} prefix={<SearchOutlined style={{ color: "#aaa" }}/>} />
             </div>
           )}
         </div>

@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
         axios.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
         const response = await UserAPI.getProfile();
         if (response.isSuccess) {
+          console.log("User profile:", response.data);
           setUser(response.data);
         }
       }
@@ -31,5 +32,5 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  return <AuthContext.Provider value={{ user, setUser, loading, setLoading }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, setUser, loading, setLoading, getProfile }}>{children}</AuthContext.Provider>;
 };
