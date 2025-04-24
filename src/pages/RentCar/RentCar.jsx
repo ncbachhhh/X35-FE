@@ -8,7 +8,6 @@ import { useLocation } from "react-router-dom";
 
 export default function RentCar() {
   const urlParams = new URLSearchParams(window.location.search);
-
   const [current, setCurrent] = useState(1);
   const [cars, setCars] = useState([]);
   const [keyword, setKeyword] = useState(urlParams.get("keyword") || "");
@@ -56,6 +55,7 @@ export default function RentCar() {
       price: price,
       sortBy: `${sortBy}:${sortOrder}`,
       page: current,
+      limit: 12,
     };
 
     const response = await CarAPI.getCarListing(query);
@@ -68,7 +68,7 @@ export default function RentCar() {
     <div className="rent-container">
       <FilterSidebar sortBy={sortBy} setSortBy={setSortBy} sortOrder={sortOrder} setSortOrder={setSortOrder} selectedType={selectedType} setSelectedType={setSelectedType} selectedCapacity={selectedCapacity} setSelectedCapacity={setSelectedCapacity} selectedGearbox={selectedGearbox} setSelectedGearbox={setSelectedGearbox} price={price} setPrice={setPrice} />
       <div className="rent-listing-container">
-        <div className="car-listing" style={cars.length === 0 ? {display: 'flex', justifyContent: 'center'} : {}}>
+        <div className="car-listing" style={cars.length === 0 ? { display: "flex", justifyContent: "center" } : {}}>
           {cars.length > 0 ? (
             cars.map((car) => {
               return <CarCard car={car} key={car._id} />;
@@ -79,9 +79,11 @@ export default function RentCar() {
             </div>
           )}
         </div>
-        <div>
-          <Pagination current={current} onChange={onChange} total={total} pageSize={12} showSizeChanger={false} style={{ margin: "0 0 40px 0" }} />
-        </div>
+        {cars.length > 0 && (
+          <div>
+            <Pagination current={current} onChange={onChange} total={total} pageSize={12} showSizeChanger={false} style={{ margin: "0 0 40px 0" }} />
+          </div>
+        )}
       </div>
     </div>
   );

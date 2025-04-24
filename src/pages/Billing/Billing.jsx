@@ -4,6 +4,7 @@ import { Form, Radio, Select, DatePicker, TimePicker, Row, Col, Button, Input, C
 import { CITY } from "../../CONSTANTS";
 import moment from "moment";
 import formatDollar from "../../helpers/FormatDollar";
+import { v7 } from "uuid";
 
 const { Option } = Select;
 
@@ -23,8 +24,9 @@ const car = {
 
 export default function Billing() {
   const [form] = Form.useForm();
-
   const [durationInHours, setDurationInHours] = useState(null);
+  const [orderId, setOrderId] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const calculateDuration = () => {
     const values = form.getFieldsValue();
@@ -45,8 +47,23 @@ export default function Billing() {
   };
 
   const onFinish = (values) => {
-    console.log("Form values:", values);
-    // Xử lý submit ở đây
+    const formatDateTime = (val, type) => {
+      if (!val) return null;
+      return type === "date" ? val.format("DD/MM/YYYY") : val.format("HH:mm:ss");
+    };
+
+    const formattedValues = {
+      ...values,
+      "pick-time": formatDateTime(values["pick-time"], "time"),
+      "drop-time": formatDateTime(values["drop-time"], "time"),
+      "pick-date": formatDateTime(values["pick-date"], "date"),
+      "drop-date": formatDateTime(values["drop-date"], "date"),
+    };
+
+    console.log("Form values:", formattedValues);
+    setOrderId(v7()); // Tạo mã đơn hàng ngẫu nhiên
+
+    setShowModal(true); // Hiện modal thanh toán
   };
 
   return (
@@ -214,6 +231,19 @@ export default function Billing() {
               <p>Step 3 of 4</p>
             </div>
           </div>
+          <div className="payment-form">
+            <Form.Item name="paymentMethod" rules={[{ required: true, message: "Please select your payment method" }]}>
+              <Radio.Group className="payment-method-group">
+                <Radio value="momo" className="payment-option">
+                  <div className="payment-content">
+                    <span>MoMo</span>
+                    <img src="https://homepage.momocdn.net/fileuploads/svg/momo-file-240411162904.svg" alt="MoMo" className="payment-logo" />
+                  </div>
+                </Radio>
+                {/* Thêm các phương thức khác nếu có */}
+              </Radio.Group>
+            </Form.Item>
+          </div>
         </div>
         {/* ======================================================================= */}
 
@@ -293,6 +323,40 @@ export default function Billing() {
           <p>{formatDollar((durationInHours / 24) * car.price * 1.1)}</p>
         </div>
       </div>
+      {showModal && (
+        <div className="momo-qr-show-payment-overlay">
+          <div className="momo-qr-modal">
+            <h3>Scan QR Code to Pay with MoMo</h3>
+            <p>Please use the MoMo app to scan the QR code below</p>
+            <div className="qr-box">
+              <img
+                src="https://momodev.momocdn.net/s/img/momo_qr_sample.png" // Replace with real API QR URL
+                alt="MoMo QR"
+                className="qr-image"
+              />
+            </div>
+            <div className="qr-info">
+              <p>
+                <strong>Recipient:</strong> Nguyen Chien Bach
+              </p>
+              <p>
+                <strong>Order ID:</strong> {orderId}
+              </p>
+              <p>
+                <strong>Total Amount:</strong> {formatDollar((durationInHours / 24) * car.price * 1.1)}
+              </p>
+            </div>
+            <div className="qr-actions">
+              <Button type="primary" size="large" onClick={() => alert("Waiting for payment confirmation...")}>
+                I Have Paid
+              </Button>
+              <Button type="text" size="large" onClick={() => setShowModal(false)} style={{ marginLeft: 12 }}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
