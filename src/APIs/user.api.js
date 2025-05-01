@@ -1,12 +1,14 @@
 import { DOMAIN } from "../CONSTANTS.js";
 import axios from "axios";
 
+const URL = `${DOMAIN}/api/auth`;
+
 const API_URL = {
-  LOGIN: `${DOMAIN}/auth/user/login`,
-  REGISTER: `${DOMAIN}/auth/user/register`,
-  GET_PROFILE: `${DOMAIN}/auth/user/get-profile`,
-  SEND_CODE_FORGOT_PASSWORD: `${DOMAIN}/auth/send-code-forgot-password`,
-  VERIFY_CODE_FORGOT_PASSWORD: `${DOMAIN}/auth/verify-code-and-reset-password`,
+  LOGIN: `${URL}/user/login`,
+  REGISTER: `${URL}/user/register`,
+  GET_PROFILE: `${URL}/user/get-profile`,
+  SEND_CODE_FORGOT_PASSWORD: `${URL}/send-code-forgot-password`,
+  VERIFY_CODE_FORGOT_PASSWORD: `${URL}/verify-code-and-reset-password`,
 };
 
 const UserAPI = {

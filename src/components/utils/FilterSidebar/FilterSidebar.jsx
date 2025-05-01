@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import "./FilterSidebar.css";
 import { Checkbox, Select, Slider } from "antd";
 import formatDollar from "../../../helpers/FormatDollar";
+import axios from "axios";
+import CarAPI from "../../../APIs/car.api";
 
 // Tùy chỉnh danh sách tùy chọn cho TYPE
 const typeOptions = [
@@ -19,11 +21,6 @@ const capacityOptions = [
   { label: "4 Person", value: "4" },
   { label: "6 Person", value: "6" },
   { label: "8 or More", value: "8plus" },
-];
-
-const gearboxOptions = [
-  { label: "Automatic", value: "Automatic" },
-  { label: "Manual", value: "Manual" },
 ];
 
 export default function FilterSidebar({ sortBy, setSortBy, sortOrder, setSortOrder, selectedType, setSelectedType, selectedCapacity, setSelectedCapacity, selectedGearbox, setSelectedGearbox, price, setPrice }) {
@@ -50,6 +47,36 @@ export default function FilterSidebar({ sortBy, setSortBy, sortOrder, setSortOrd
   const handleGearboxChange = (checkedValues) => {
     setSelectedGearbox(checkedValues);
   };
+
+  const [gearboxOptions, setGearboxOptions] = useState([]);
+  const [typeOptions, setTypeOptions] = useState([]);
+
+  const getGearboxOptions = async () => {
+    const response = await CarAPI.getGearbox();
+    if (response.isSuccess) {
+      const options = response.data.map((item) => ({
+        label: item.name,
+        value: item._id,
+      }));
+      setGearboxOptions(options);
+    }
+  };
+
+  const getTypeOptions = async () => {
+    const response = await CarAPI.getType();
+    if (response.isSuccess) {
+      const options = response.data.map((item) => ({
+        label: item.name,
+        value: item._id,
+      }));
+      setTypeOptions(options);
+    }
+  };
+
+  useEffect(() => {
+    getGearboxOptions();
+    getTypeOptions();
+  }, []);
 
   return (
     <div className="side-bar-container">
@@ -100,7 +127,7 @@ export default function FilterSidebar({ sortBy, setSortBy, sortOrder, setSortOrd
         <h4>PRICE</h4>
         <Slider
           min={0}
-          max={1000} // tùy chỉnh max nếu muốn
+          max={200} // tùy chỉnh max nếu muốn
           value={price}
           onChange={handlePriceChange}
         />

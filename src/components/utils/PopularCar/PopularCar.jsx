@@ -16,7 +16,7 @@ export default function PopularCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 80,
-      image: "/assets/image 7.png",
+      image: ["/assets/image 7.png"],
     },
     {
       id: 2,
@@ -26,7 +26,7 @@ export default function PopularCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 20,
-      image: "/assets/image 8.png",
+      image: ["/assets/image 8.png"],
     },
     {
       id: 3,
@@ -36,7 +36,7 @@ export default function PopularCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 40,
-      image: "/assets/image 7.png",
+      image: ["/assets/image 7.png"],
     },
     {
       id: 4,
@@ -46,7 +46,7 @@ export default function PopularCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 90,
-      image: "/assets/image 8.png",
+      image: ["/assets/image 8.png"],
     },
   ];
 

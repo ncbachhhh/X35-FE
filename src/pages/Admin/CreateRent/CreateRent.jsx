@@ -55,7 +55,7 @@ export default function CreateRent() {
 
   const handleFinish = async (values) => {
     setLoading(true);
-    const response = await CarAPI.createRent(values);
+    const response = await CarAPI.createCar(values);
     if (response.isSuccess) {
       api.success({ message: "Car added successfully!", description: "The car has been added to the system.", duration: 1.5 });
       form.resetFields();

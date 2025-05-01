@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./RecomendationCar.css";
 import CarCard from "../../ui/CarCard/CarCard.jsx";
 import ButtonUI from "../../ui/ButtonUI/ButtonUI.jsx";
+import CarAPI from "../../../APIs/car.api.js";
 
 export default function RecomendationCar() {
   const totalCar = 120;
@@ -15,7 +16,7 @@ export default function RecomendationCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 80,
-      image: "/assets/image 7.png",
+      image: ["/assets/image 7.png"],
     },
     {
       id: 2,
@@ -25,7 +26,7 @@ export default function RecomendationCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 20,
-      image: "/assets/image 8.png",
+      image: ["/assets/image 8.png"],
     },
     {
       id: 3,
@@ -35,7 +36,7 @@ export default function RecomendationCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 40,
-      image: "/assets/image 7.png",
+      image: ["/assets/image 7.png"],
     },
     {
       id: 4,
@@ -45,7 +46,7 @@ export default function RecomendationCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 90,
-      image: "/assets/image 8.png",
+      image: ["/assets/image 8.png"],
     },
     {
       id: 5,
@@ -55,7 +56,7 @@ export default function RecomendationCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 80,
-      image: "/assets/image 7.png",
+      image: ["/assets/image 7.png"],
     },
     {
       id: 6,
@@ -65,7 +66,7 @@ export default function RecomendationCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 20,
-      image: "/assets/image 8.png",
+      image: ["/assets/image 8.png"],
     },
     {
       id: 7,
@@ -75,7 +76,7 @@ export default function RecomendationCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 40,
-      image: "/assets/image 7.png",
+      image: ["/assets/image 7.png"],
     },
     {
       id: 8,
@@ -85,9 +86,25 @@ export default function RecomendationCar() {
       gearbox: "Automatic",
       seats: 4,
       price: 90,
-      image: "/assets/image 8.png",
+      image: ["/assets/image 8.png"],
     },
   ];
+
+  const [cars, setCars] = useState([]);
+
+  const getCarRecommend = async () => {
+    const response = await CarAPI.getCarRecommend(8);
+    if (response.isSuccess) {
+      setCars(response.data);
+    } else {
+      console.error("Error fetching recommended cars:", response.message);
+    }
+  };
+
+  useEffect(() => {
+    getCarRecommend();
+  }, []);
+
   return (
     <div className="recomendation-car-container">
       {/* Tiêu đề */}
@@ -97,7 +114,7 @@ export default function RecomendationCar() {
 
       {/* Danh sách xe */}
       <div className="recomendation-car-listing">
-        {data.map((car) => {
+        {cars.map((car) => {
           return <CarCard car={car} key={car.id} />;
         })}
       </div>

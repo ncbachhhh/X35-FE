@@ -10,7 +10,7 @@ export default function CarCard(props) {
   const { user, getProfile } = useAuth();
   const { api } = useNotification();
   const { car } = props;
-  const url = `/category/${car.id}`; // Đường dẫn đến trang chi tiết xe
+  const url = `/category/${car._id}`; // Đường dẫn đến trang chi tiết xe
 
   const likeCar = async () => {
     if (user) {

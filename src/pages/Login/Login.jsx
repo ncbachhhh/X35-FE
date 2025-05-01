@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import "./Login.css";
 import { Button, Checkbox, Input, Form, message } from "antd";
 import ButtonUI from "../../components/ui/ButtonUI/ButtonUI.jsx";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import UserAPI from "../../APIs/user.api.js";
 import { useNotification } from "../../contexts/notification.context.js";
 import Loading from "../../components/ui/Loading/Loading.jsx";
@@ -11,6 +11,7 @@ export default function Login() {
   const { api } = useNotification();
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   // Hàm xử lý trim trực tiếp
   const handleTrim = (e, fieldName) => {
@@ -51,6 +52,9 @@ export default function Login() {
     <div className="login-container">
       {/* Hero */}
       <div className="hero-1 hero" style={{ width: "55%" }}>
+        <p className="comeback" onClick={() => navigate(-1)} style={{color: 'white'}}>
+          <i className="fa-solid fa-arrow-left"></i> Quay lại
+        </p>
         <div className="hero-text">
           <h1>The Best Platform for Car Rental</h1>
           <p>This is a simple hero section with a title and some text.</p>
