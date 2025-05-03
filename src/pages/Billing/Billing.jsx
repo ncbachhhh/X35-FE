@@ -1,32 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Billing.css";
 import { Form, Radio, Select, DatePicker, TimePicker, Row, Col, Button, Input, Checkbox, Rate } from "antd";
 import { CITY } from "../../CONSTANTS";
 import moment from "moment";
 import formatDollar from "../../helpers/FormatDollar";
 import { v7 } from "uuid";
+import { useParams } from "react-router-dom";
+import CarAPI from "../../APIs/car.api";
+import PaymentAPI from "../../APIs/payment.api";
 
 const { Option } = Select;
 
-const car = {
-  id: 12,
-  brand: "Honda",
-  name: "Civic",
-  type: "SUV",
-  tank: "80",
-  gearbox: "Automatic",
-  seats: 4,
-  price: 90,
-  image: "/assets/image 8.png",
-  rate: 4.5,
-  description: "The Honda Civic is a compact car that has been popular for decades. It is known for its reliability, fuel efficiency, and sporty design. ",
-};
+const BANK_OPTIONS = [
+  { label: "Vietcombank", value: "VCB" },
+  { label: "Techcombank", value: "TCB" },
+  { label: "MB Bank", value: "MB" },
+  { label: "BIDV", value: "BIDV" },
+  { label: "VPBank", value: "VPB" },
+  { label: "Agribank", value: "Agribank" },
+  { label: "VietinBank", value: "VietinBank" },
+];
 
 export default function Billing() {
+  const { id } = useParams();
   const [form] = Form.useForm();
   const [durationInHours, setDurationInHours] = useState(null);
   const [orderId, setOrderId] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [car, setCar] = useState({ image: [] });
+  const [qrImage, setQrImage] = useState("");
+  const [paymentUrl, setPaymentUrl] = useState("");
+
+  const getCarDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await CarAPI.getCar(id);
+      if (response.isSuccess) {
+        setCar(response.data);
+        console.log(response.data);
+        setLoading(false);
+      } else {
+        console.error(response.message);
+      }
+    } catch (error) {
+      console.error("Error fetching car details:", error);
+    }
+  };
+
+  useEffect(() => {
+    getCarDetails();
+  }, [id]);
 
   const calculateDuration = () => {
     const values = form.getFieldsValue();
@@ -46,7 +70,21 @@ export default function Billing() {
     }
   };
 
-  const onFinish = (values) => {
+  const getQRImage = async (data) => {
+    try {
+      const response = await PaymentAPI.createPayment(data);
+      console.log(response);
+      
+      if (response.isSuccess) {
+        setQrImage(response.qrCode);
+        setPaymentUrl(response.paymentUrl);
+      }
+    } catch (error) {
+      console.error("Error fetching QR code:", error);
+    }
+  };
+
+  const onFinish = async (values) => {
     const formatDateTime = (val, type) => {
       if (!val) return null;
       return type === "date" ? val.format("DD/MM/YYYY") : val.format("HH:mm:ss");
@@ -54,6 +92,7 @@ export default function Billing() {
 
     const formattedValues = {
       ...values,
+      amount: Math.round((durationInHours / 24) * car.price * 1.1 * 1000),
       "pick-time": formatDateTime(values["pick-time"], "time"),
       "drop-time": formatDateTime(values["drop-time"], "time"),
       "pick-date": formatDateTime(values["pick-date"], "date"),
@@ -62,6 +101,14 @@ export default function Billing() {
 
     console.log("Form values:", formattedValues);
     setOrderId(v7()); // Tạo mã đơn hàng ngẫu nhiên
+
+    const data = {
+      amount: Math.round((durationInHours / 24) * car.price * 1.1 * 1000),
+      bankCode: values.bankCode,
+      orderId: orderId,
+    };
+
+    await getQRImage(data); // Gọi API để lấy QR code
 
     setShowModal(true); // Hiện modal thanh toán
   };
@@ -234,14 +281,24 @@ export default function Billing() {
           <div className="payment-form">
             <Form.Item name="paymentMethod" rules={[{ required: true, message: "Please select your payment method" }]}>
               <Radio.Group className="payment-method-group">
-                <Radio value="momo" className="payment-option">
+                <Radio value="vnpay" className="payment-option">
                   <div className="payment-content">
-                    <span>MoMo</span>
-                    <img src="https://homepage.momocdn.net/fileuploads/svg/momo-file-240411162904.svg" alt="MoMo" className="payment-logo" />
+                    <span>VNPAY</span>
+                    <img src="https://vnpay.vn/s1/statics.vnpay.vn/2023/6/0oxhzjmxbksr1686814746087.png" alt="vnpay" className="payment-logo" />
                   </div>
                 </Radio>
                 {/* Thêm các phương thức khác nếu có */}
               </Radio.Group>
+            </Form.Item>
+            <Form.Item name="bankCode" label="Select Your Bank" rules={[{ required: true, message: "Please select your bank" }]}>
+              <Select placeholder="Choose a bank" size="large">
+                <Option value="TCB">Techcombank (TCB)</Option>
+                {BANK_OPTIONS.map((bank) => (
+                  <Option key={bank.value} value={bank.value}>
+                    {bank.label}
+                  </Option>
+                ))}
+              </Select>
             </Form.Item>
           </div>
         </div>
@@ -291,7 +348,7 @@ export default function Billing() {
         </div>
         <div className="car-card-detail-body">
           <div className="car-card-detail-image">
-            <img src={car.image} alt="" />
+            <img src={car.image[0]} alt="" />
           </div>
           <div className="car-card-detail-info">
             <h4 className="car-card-detail-name">
@@ -330,7 +387,7 @@ export default function Billing() {
             <p>Please use the MoMo app to scan the QR code below</p>
             <div className="qr-box">
               <img
-                src="https://momodev.momocdn.net/s/img/momo_qr_sample.png" // Replace with real API QR URL
+                src={qrImage} // Replace with real API QR URL
                 alt="MoMo QR"
                 className="qr-image"
               />

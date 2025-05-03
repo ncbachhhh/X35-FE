@@ -65,7 +65,11 @@ export default function CarCard(props) {
         <p>
           {FormatDollar(car.price)}/ <span>day</span>{" "}
         </p>
-        <ButtonUI content="Rent Now" navigate={url} />
+        <ButtonUI
+          content="Rent Now"
+          navigate={url}
+          carId={car._id}
+        />
       </div>
     </div>
   );

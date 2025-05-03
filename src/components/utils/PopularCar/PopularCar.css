@@ -27,7 +27,7 @@
 .popular-car-listing {
   display: grid;
   justify-content: space-between;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 

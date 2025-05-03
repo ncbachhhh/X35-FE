@@ -1,5 +1,6 @@
 import { DOMAIN } from "../CONSTANTS.js";
 import axios from "axios";
+import authorizedAxios from "../helpers/authorizedAxios.js";
 
 const URL = `${DOMAIN}/api`;
 
@@ -146,9 +147,7 @@ const CarAPI = {
   },
   getCarRecommend: async (limit) => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
-      axios.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
-      const response = await axios.post(API_URL.GET_CAR_RECOMMEND, {limit: limit});
+      const response = await authorizedAxios().post(API_URL.GET_CAR_RECOMMEND, {limit: limit});
       
       return {
         isSuccess: true,

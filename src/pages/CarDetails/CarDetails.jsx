@@ -7,39 +7,9 @@ import ButtonUI from "../../components/ui/ButtonUI/ButtonUI";
 import CarCard from "../../components/ui/CarCard/CarCard";
 import CarAPI from "../../APIs/car.api";
 import Loading from "../../components/ui/Loading/Loading";
-
+import UserAPI from "../../APIs/user.api";
 
 const { Paragraph } = Typography;
-
-// // Note: Tạo lại data
-// const car = {
-//   id: 12,
-//   brand: "Honda",
-//   name: "Civic",
-//   type: "SUV",
-//   tank: "80",
-//   gearbox: "Automatic",
-//   seats: 4,
-//   price: 90,
-//   image: "/assets/image 8.png",
-//   rate: 4.5,
-//   description: "The Honda Civic is a compact car that has been popular for decades. It is known for its reliability, fuel efficiency, and sporty design. ",
-// };
-
-// const images = [
-//   {
-//     id: 1,
-//     url: "/assets/View 1.svg",
-//   },
-//   {
-//     id: 2,
-//     url: "/assets/View 2.svg",
-//   },
-//   {
-//     id: 3,
-//     url: "/assets/View 3.svg",
-//   },
-// ];
 
 const comments = [
   {
@@ -76,47 +46,16 @@ const comments = [
   },
 ];
 
-const carRecommend = [
-  {
-    id: 1,
-    name: "CR-V",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 80,
-    image: "/assets/image 7.png",
-  },
-  {
-    id: 2,
-    name: "Civic",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 20,
-    image: "/assets/image 8.png",
-  },
-  {
-    id: 3,
-    name: "CR-V",
-    type: "SUV",
-    tank: "80",
-    gearbox: "Automatic",
-    seats: 4,
-    price: 40,
-    image: "/assets/image 7.png",
-  },
-];
-
 export default function CarDetails() {
   const { id } = useParams();
-  const [car, setCar] = useState({image: []});
+  const [car, setCar] = useState({ image: [] });
   const [mainImage, setMainImage] = useState();
   const [images, setImages] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const [comment, setComment] = useState(comments.slice(0, 2));
   const [loading, setLoading] = useState(false);
+  const [carRecommend, setRecommend] = useState([]);
+  const [carRecent, setRecent] = useState([]);
   const navigate = useNavigate();
 
   const getCarDetails = async () => {
@@ -137,9 +76,32 @@ export default function CarDetails() {
     }
   };
 
+  const getCarRecommend = async () => {
+    const response = await CarAPI.getCarRecommend(3);
+    if (response.isSuccess) {
+      setRecommend(response.data);
+    } else {
+      console.error("Error fetching recommended cars:", response.message);
+    }
+  };
+
+  const getCarRecent = async () => {
+    const response = await UserAPI.getRecentViewedCars();
+    if (response.isSuccess) {
+      setRecent(response.data);
+    } else {
+      console.error("Error fetching recent cars:", response.message);
+    }
+  };
+
   useEffect(() => {
     getCarDetails();
+    getCarRecommend();
   }, []);
+
+  useEffect(() => {
+    getCarRecent();
+  }, [car]);
 
   return (
     <div className="car-detail-container">
@@ -166,7 +128,7 @@ export default function CarDetails() {
                 </div>
               </div>
               <div className="car-mini-image">
-                {(images).map((image) => (
+                {images.map((image) => (
                   <img key={image} src={image} onClick={() => setMainImage(image)} style={{ border: mainImage === image ? "2px solid #3563E9" : "1px solid transparent", borderRadius: "15px", objectFit: "cover", width: "calc(100% / 3)" }} />
                 ))}
               </div>
@@ -213,7 +175,7 @@ export default function CarDetails() {
                   </p>
                   <p>{formatDollar(car.price * 1.1)}</p>
                 </div>
-                <ButtonUI content="Rent Now" style={{ height: "100%", width: "200px" }} navigate={`/payment/${car.id}`} />
+                <ButtonUI content="Rent Now" style={{ height: "100%", width: "200px" }} navigate={`/payment/${car._id}`} />
               </div>
             </div>
           </div>
@@ -268,14 +230,23 @@ export default function CarDetails() {
           <div className="car-recent">
             <div className="popular-car-head">
               <p className="head-title">Recent Car</p>
-              <p className="view-all" onClick={() => navigate("/category")}>
+              <p
+                className="view-all"
+                onClick={() => {
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                  navigate("/category");
+                }}
+              >
                 View All
               </p>
             </div>
 
             {/* Danh sách xe */}
             <div className="recent-car-listing">
-              {carRecommend.map((car) => {
+              {carRecent.map((car) => {
                 return <CarCard car={car} key={car.id} />;
               })}
             </div>
@@ -283,7 +254,16 @@ export default function CarDetails() {
           <div className="car-recommendation">
             <div className="popular-car-head">
               <p className="head-title">Recommendation Car</p>
-              <p className="view-all" onClick={() => navigate("/category")}>
+              <p
+                className="view-all"
+                onClick={() => {
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                  navigate("/category");
+                }}
+              >
                 View All
               </p>
             </div>
@@ -291,7 +271,7 @@ export default function CarDetails() {
             {/* Danh sách xe */}
             <div className="recent-car-listing">
               {carRecommend.map((car) => {
-                return <CarCard car={car} key={car.id} />;
+                return <CarCard car={car} key={car._id} />;
               })}
             </div>
           </div>

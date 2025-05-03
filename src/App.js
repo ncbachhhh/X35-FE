@@ -14,6 +14,7 @@ import VerifyEmail from "./pages/VerifyEmail/VerifyEmail.jsx";
 import LayoutAdmin from "./components/layouts/LayoutAdmin.jsx";
 import HomeAdmin from "./pages/Admin/HomeAdmin/HomeAdmin.jsx";
 import CreateRent from "./pages/Admin/CreateRent/CreateRent.jsx";
+import ChangePassword from "./pages/ChangePassword/ChangePassword.jsx";
 
 function App() {
   return (
@@ -35,6 +36,9 @@ function App() {
               {/* Quên mật khẩu */}
               <Route path="/auth/forgot-password" element={<ForgotPassword />} />
 
+              {/* Đổi mật khẩu */}
+              <Route path="/auth/change-password" element={<ChangePassword />} />
+
               {/* Home */}
               <Route path="" element={<Home />} />
 
@@ -48,7 +52,7 @@ function App() {
               <Route path="/payment/:id" element={<Billing />} />
             </Route>
 
-            <Route path="/admin" element={<LayoutAdmin />} >
+            <Route path="/admin" element={<LayoutAdmin />}>
               <Route path="" element={<HomeAdmin />} />
               <Route path="create-rent" element={<CreateRent />} />
             </Route>
