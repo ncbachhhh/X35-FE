@@ -9,7 +9,7 @@ function formatDollar(value) {
   formatted = formatted.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
   // Thêm ký hiệu VNĐ
-  return formatted + ".000" + "VND";
+  return formatted + "kVND";
 }
 
 export default formatDollar;

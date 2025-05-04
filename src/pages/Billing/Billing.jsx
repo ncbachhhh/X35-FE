@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
-import "./Billing.css";
-import { Form, Radio, Select, DatePicker, TimePicker, Row, Col, Button, Input, Checkbox, Rate } from "antd";
-import { CITY } from "../../CONSTANTS";
+import { Form, Radio, Select, DatePicker, TimePicker, Row, Col, Button, Input, Checkbox, Rate, message } from "antd";
 import moment from "moment";
-import formatDollar from "../../helpers/FormatDollar";
 import { v7 } from "uuid";
-import { useParams } from "react-router-dom";
+import { CITY } from "../../CONSTANTS";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import "./Billing.css";
+import formatDollar from "../../helpers/FormatDollar";
 import CarAPI from "../../APIs/car.api";
 import PaymentAPI from "../../APIs/payment.api";
+import { useNotification } from "../../contexts/notification.context";
 
 const { Option } = Select;
 
 const BANK_OPTIONS = [
   { label: "Vietcombank", value: "VCB" },
+  { label: "NCB", value: "NCB" },
   { label: "Techcombank", value: "TCB" },
   { label: "MB Bank", value: "MB" },
   { label: "BIDV", value: "BIDV" },
@@ -23,14 +25,19 @@ const BANK_OPTIONS = [
 
 export default function Billing() {
   const { id } = useParams();
+  const { api } = useNotification();
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const [durationInHours, setDurationInHours] = useState(null);
-  const [orderId, setOrderId] = useState("");
+  const [orderId, setOrderId] = useState(v7());
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [car, setCar] = useState({ image: [] });
   const [qrImage, setQrImage] = useState("");
   const [paymentUrl, setPaymentUrl] = useState("");
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const responseCode = query.get("vnp_ResponseCode");
 
   const getCarDetails = async () => {
     try {
@@ -38,7 +45,6 @@ export default function Billing() {
       const response = await CarAPI.getCar(id);
       if (response.isSuccess) {
         setCar(response.data);
-        console.log(response.data);
         setLoading(false);
       } else {
         console.error(response.message);
@@ -72,13 +78,13 @@ export default function Billing() {
 
   const getQRImage = async (data) => {
     try {
+      console.log(data);  
       const response = await PaymentAPI.createPayment(data);
-      console.log(response);
-      
       if (response.isSuccess) {
         setQrImage(response.qrCode);
         setPaymentUrl(response.paymentUrl);
       }
+      console.log(response);
     } catch (error) {
       console.error("Error fetching QR code:", error);
     }
@@ -90,28 +96,47 @@ export default function Billing() {
       return type === "date" ? val.format("DD/MM/YYYY") : val.format("HH:mm:ss");
     };
 
+    // Tính số tiền thanh toán
+    const amount = Math.round((durationInHours / 24) * car.price * 1.1 * 1000);
+
+    // Chuẩn hóa thời gian, ngày tháng
     const formattedValues = {
       ...values,
-      amount: Math.round((durationInHours / 24) * car.price * 1.1 * 1000),
+      amount,
+      orderId,
+      carId: car._id,
       "pick-time": formatDateTime(values["pick-time"], "time"),
       "drop-time": formatDateTime(values["drop-time"], "time"),
       "pick-date": formatDateTime(values["pick-date"], "date"),
       "drop-date": formatDateTime(values["drop-date"], "date"),
     };
 
-    console.log("Form values:", formattedValues);
-    setOrderId(v7()); // Tạo mã đơn hàng ngẫu nhiên
+    await getQRImage(formattedValues); // Gửi toàn bộ lên server để lưu/khởi tạo bill
 
-    const data = {
-      amount: Math.round((durationInHours / 24) * car.price * 1.1 * 1000),
-      bankCode: values.bankCode,
-      orderId: orderId,
-    };
-
-    await getQRImage(data); // Gọi API để lấy QR code
-
-    setShowModal(true); // Hiện modal thanh toán
+    setShowModal(true); // Mở modal hiển thị QR
   };
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const success = searchParams.get("success");
+
+    if (success === "true") {
+      api.success({
+        message: "Payment successful!",
+        description: "Your payment has been processed successfully.",
+        duration: 1.5,
+      });
+      setShowModal(false);
+      setTimeout(() => navigate("/"), 1500);
+    } else if (success === "false") {
+      api.error({
+        message: "Payment failed!",
+        description: "Your payment could not be processed. Please try again.",
+        duration: 1.5,
+      });
+      setShowModal(false);
+    }
+  }, [location.search]);
 
   return (
     <div className="billing-container">
@@ -292,7 +317,6 @@ export default function Billing() {
             </Form.Item>
             <Form.Item name="bankCode" label="Select Your Bank" rules={[{ required: true, message: "Please select your bank" }]}>
               <Select placeholder="Choose a bank" size="large">
-                <Option value="TCB">Techcombank (TCB)</Option>
                 {BANK_OPTIONS.map((bank) => (
                   <Option key={bank.value} value={bank.value}>
                     {bank.label}
@@ -383,15 +407,14 @@ export default function Billing() {
       {showModal && (
         <div className="momo-qr-show-payment-overlay">
           <div className="momo-qr-modal">
-            <h3>Scan QR Code to Pay with MoMo</h3>
-            <p>Please use the MoMo app to scan the QR code below</p>
+            <h3>Scan QR Code to Pay with VNPay</h3>
+            <p>Please scan the QR code below</p>
             <div className="qr-box">
-              <img
-                src={qrImage} // Replace with real API QR URL
-                alt="MoMo QR"
-                className="qr-image"
-              />
+              <img src={qrImage} alt="VNPay QR" className="qr-image" />
             </div>
+            <a href={paymentUrl} target="_blank" rel="noopener noreferrer">
+              Redirect to payment page
+            </a>
             <div className="qr-info">
               <p>
                 <strong>Recipient:</strong> Nguyen Chien Bach

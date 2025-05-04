@@ -8,6 +8,7 @@ import CarCard from "../../components/ui/CarCard/CarCard";
 import CarAPI from "../../APIs/car.api";
 import Loading from "../../components/ui/Loading/Loading";
 import UserAPI from "../../APIs/user.api";
+import { useAuth } from "../../contexts/auth.context";
 
 const { Paragraph } = Typography;
 
@@ -48,6 +49,7 @@ const comments = [
 
 export default function CarDetails() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [car, setCar] = useState({ image: [] });
   const [mainImage, setMainImage] = useState();
   const [images, setImages] = useState([]);
@@ -227,54 +229,58 @@ export default function CarDetails() {
               )}
             </div>
           </div>
-          <div className="car-recent">
-            <div className="popular-car-head">
-              <p className="head-title">Recent Car</p>
-              <p
-                className="view-all"
-                onClick={() => {
-                  window.scrollTo({
-                    top: 0,
-                    behavior: "smooth",
-                  });
-                  navigate("/category");
-                }}
-              >
-                View All
-              </p>
-            </div>
+          {user && (
+            <>
+              <div className="car-recent">
+                <div className="popular-car-head">
+                  <p className="head-title">Recent Car</p>
+                  <p
+                    className="view-all"
+                    onClick={() => {
+                      window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
+                      navigate("/category");
+                    }}
+                  >
+                    View All
+                  </p>
+                </div>
 
-            {/* Danh sách xe */}
-            <div className="recent-car-listing">
-              {carRecent.map((car) => {
-                return <CarCard car={car} key={car.id} />;
-              })}
-            </div>
-          </div>
-          <div className="car-recommendation">
-            <div className="popular-car-head">
-              <p className="head-title">Recommendation Car</p>
-              <p
-                className="view-all"
-                onClick={() => {
-                  window.scrollTo({
-                    top: 0,
-                    behavior: "smooth",
-                  });
-                  navigate("/category");
-                }}
-              >
-                View All
-              </p>
-            </div>
+                {/* Danh sách xe */}
+                <div className="recent-car-listing">
+                  {carRecent.map((car) => {
+                    return <CarCard car={car} key={car.id} />;
+                  })}
+                </div>
+              </div>
+              <div className="car-recommendation">
+                <div className="popular-car-head">
+                  <p className="head-title">Recommendation Car</p>
+                  <p
+                    className="view-all"
+                    onClick={() => {
+                      window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
+                      navigate("/category");
+                    }}
+                  >
+                    View All
+                  </p>
+                </div>
 
-            {/* Danh sách xe */}
-            <div className="recent-car-listing">
-              {carRecommend.map((car) => {
-                return <CarCard car={car} key={car._id} />;
-              })}
-            </div>
-          </div>
+                {/* Danh sách xe */}
+                <div className="recent-car-listing">
+                  {carRecommend.map((car) => {
+                    return <CarCard car={car} key={car._id} />;
+                  })}
+                </div>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

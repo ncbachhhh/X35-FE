@@ -11,7 +11,7 @@ const API_URL = {
 const PaymentAPI = {
   createPayment: async (data) => {
     try {
-      const response = await axios.post(API_URL.CREATE_PAYMENT, data);
+      const response = await authorizedAxios().post(API_URL.CREATE_PAYMENT, data);
       return {
         isSuccess: true,
         paymentUrl: response.data.paymentUrl,
