@@ -19,12 +19,14 @@ export default function CarCard(props) {
         api.success({
           message: "Success",
           description: response.message,
+          duration: 1.5,
         });
         getProfile();
       } else {
         api.error({
           message: "Error",
           description: response.message,
+          duration: 1.5,
         });
       }
     }
@@ -38,7 +40,7 @@ export default function CarCard(props) {
           <p className="car-name">{car.name}</p>
           <p className="car-type">{car.type}</p>
         </div>
-        {user?.likedCars.includes(car._id) ? <i class="fa-solid fa-heart" onClick={() => likeCar()} style={{ color: "#90A3BF", fontSize: "20px" }}></i> : <i className="fa-regular fa-heart" onClick={() => likeCar()} style={{ color: "#90A3BF", fontSize: "20px" }}></i>}
+        {user?.likedCars.includes(car._id) ? <i className="fa-solid fa-heart" onClick={() => likeCar()} style={{ color: "#FF0000", fontSize: "20px" }}></i> : <i className="fa-regular fa-heart" onClick={() => likeCar()} style={{ color: "#90A3BF", fontSize: "20px" }}></i>}
       </div>
 
       {/* Hình ảnh xe */}

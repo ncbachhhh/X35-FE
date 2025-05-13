@@ -99,7 +99,7 @@ export default function CarDetails() {
   useEffect(() => {
     getCarDetails();
     getCarRecommend();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     getCarRecent();

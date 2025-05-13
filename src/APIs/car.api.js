@@ -13,6 +13,7 @@ const API_URL = {
   GET_TYPE: `${URL}/car-type/list`,
   GET_GEARBOX: `${URL}/car-gearbox/list`,
   GET_CAR_RECOMMEND: `${URL}/car/recommend-by-liked`,
+  GET_CAR_POPULAR: `${URL}/car/popular-cars`,
 };
 
 const CarAPI = {
@@ -148,6 +149,23 @@ const CarAPI = {
   getCarRecommend: async (limit) => {
     try {
       const response = await authorizedAxios().post(API_URL.GET_CAR_RECOMMEND, {limit: limit});
+      
+      return {
+        isSuccess: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        isSuccess: false,
+        data: null,
+        message: error.response.data.message,
+      };
+    }
+  },
+  getCarPopular: async () => {
+    try {
+      const response = await authorizedAxios().get(API_URL.GET_CAR_POPULAR);
       
       return {
         isSuccess: true,

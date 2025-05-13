@@ -13,6 +13,9 @@ const API_URL = {
   ADD_RECENT_CAR: `${URL}/add-recent-car`,
   GET_RECENT_CARS: `${URL}/recent-cars`,
   CHANGE_PASSWORD: `${URL}/change-password`,
+  GET_RENT_HISTORY: `${URL}/rented-cars`,
+  RETURN_CAR: `${URL}/return-car`,
+  GET_LIKE_CARS: `${URL}/liked-cars`,
 };
 
 const UserAPI = {
@@ -115,7 +118,7 @@ const UserAPI = {
     try {
       const response = await authorizedAxios().post(API_URL.CHANGE_PASSWORD, data);
       console.log(response);
-      
+
       return {
         isSuccess: true,
         message: response.data.message,
@@ -130,7 +133,7 @@ const UserAPI = {
 
   addRecentCar: async (carId) => {
     try {
-      const response = await authorizedAxios().post(API_URL.ADD_RECENT_CAR, {carId});
+      const response = await authorizedAxios().post(API_URL.ADD_RECENT_CAR, { carId });
       return {
         isSuccess: true,
         data: response.data.data,
@@ -159,6 +162,57 @@ const UserAPI = {
       return {
         isSuccess: false,
         data: null,
+        message: err.response.data.message,
+      };
+    }
+  },
+
+  getRentHistory: async () => {
+    try {
+      const response = await authorizedAxios().get(API_URL.GET_RENT_HISTORY);
+      return {
+        isSuccess: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (err) {
+      console.error("❌ Get rent history failed:", err);
+      return {
+        isSuccess: false,
+        data: null,
+        message: err.response.data.message,
+      };
+    }
+  },
+
+  returnCar: async (billId) => {
+    try {
+      const response = await authorizedAxios().post(`${API_URL.RETURN_CAR}`, { billId });
+      return {
+        isSuccess: true,
+        message: response.data.message,
+      };
+    } catch (err) {
+      console.error("❌ Return car failed:", err);
+      return {
+        isSuccess: false,
+        message: err.response.data.message,
+      };
+    }
+  },
+
+  getLikeCars: async () => {
+    try {
+      const response = await authorizedAxios().get(API_URL.GET_LIKE_CARS);
+      return {
+        isSuccess: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (err) {
+      console.error("❌ Get liked cars failed:", err);
+      return {
+        isSuccess: false,
         message: err.response.data.message,
       };
     }

@@ -3,7 +3,6 @@ import { Form, Input, Button } from "antd";
 import { useNotification } from "../../contexts/notification.context";
 import { useNavigate } from "react-router-dom";
 import UserAPI from "../../APIs/user.api";
-// bạn có thể đổi tên nếu cần
 
 export default function ChangePassword() {
   const { api } = useNotification();
@@ -13,15 +12,15 @@ export default function ChangePassword() {
   const changePassword = async (values) => {
     const response = await UserAPI.changePassword(values);
     if (!response.isSuccess) {
-      api.error({ message: "Lỗi", description: response.message, duration: 1.5 });
+      api.error({ message: "Error", description: response.message, duration: 1.5 });
       return;
     }
-    api.success({ message: "Thành công", description: response.message, duration: 1.5 });
+    api.success({ message: "Success", description: response.message, duration: 1.5 });
   };
 
   const onFinish = async (values) => {
     setLoading(true);
-    const response = await changePassword(values);
+    await changePassword(values);
     setLoading(false);
   };
 
@@ -29,22 +28,56 @@ export default function ChangePassword() {
     <div className="forgot-password-container">
       <div className="forgot-password-form">
         <p className="comeback" onClick={() => navigate(-1)}>
-          <i className="fa-solid fa-arrow-left"></i> Quay lại
+          <i className="fa-solid fa-arrow-left"></i> Go Back
         </p>
         <h1 className="forgot-password-title">Change Password</h1>
 
         <Form onFinish={onFinish}>
-          <Form.Item normalize={(value) => value?.trim()} name="oldPassword" rules={[{ required: true, message: "Vui lòng nhập mật khẩu cũ!" }]}>
-            <Input.Password placeholder="Mật khẩu hiện tại" size="large" />
+          <Form.Item
+            name="oldPassword"
+            normalize={(value) => value?.trim()}
+            rules={[{ required: true, message: "Please enter your current password!" }]}
+          >
+            <Input.Password placeholder="Current password" size="large" />
           </Form.Item>
 
-          <Form.Item normalize={(value) => value?.trim()} name="newPassword" rules={[{ required: true, message: "Vui lòng nhập mật khẩu mới!" }]}>
-            <Input.Password placeholder="Mật khẩu mới" size="large" />
+          <Form.Item
+            name="newPassword"
+            normalize={(value) => value?.trim()}
+            rules={[
+              { required: true, message: "Please enter your new password!" },
+              { min: 8, message: "Password must be at least 8 characters!" },
+              {
+                pattern: /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/,
+                message: "Password must include at least 1 uppercase letter, 1 number, and 1 special character!",
+              },
+            ]}
+          >
+            <Input.Password placeholder="New password" size="large" />
+          </Form.Item>
+
+          <Form.Item
+            name="rePassword"
+            normalize={(value) => value?.trim()}
+            dependencies={["newPassword"]}
+            rules={[
+              { required: true, message: "Please re-enter your new password!" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("newPassword") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("Passwords do not match!"));
+                },
+              }),
+            ]}
+          >
+            <Input.Password placeholder="Re-enter new password" size="large" />
           </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit" block size="large" loading={loading}>
-              Đổi mật khẩu
+              Change Password
             </Button>
           </Form.Item>
         </Form>

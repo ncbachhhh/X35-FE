@@ -180,13 +180,13 @@ export default function CreateRent() {
           </Form.Item>
 
           <Form.Item
-            label="Car Images (up to 3)"
+            label="Car Images (up to 4)"
             name="image"
             valuePropName="fileList"
             getValueFromEvent={normFile}
             rules={[{ required: true, message: "Please upload images!" }]}
           >
-            <Upload name="image" listType="picture" beforeUpload={() => false} maxCount={3}>
+            <Upload name="image" listType="picture" beforeUpload={() => false} maxCount={4}>
               <Button size="large" icon={<UploadOutlined />}>
                 Upload
               </Button>

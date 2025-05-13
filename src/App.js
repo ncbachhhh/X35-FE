@@ -9,12 +9,15 @@ import CarDetails from "./pages/CarDetails/CarDetails.jsx";
 import Billing from "./pages/Billing/Billing.jsx";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword.jsx";
 import { NotificationProvider } from "./contexts/notification.context.js";
-import { AuthProvider } from "./contexts/auth.context.js";
+import { AuthProvider, useAuth } from "./contexts/auth.context.js";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail.jsx";
 import LayoutAdmin from "./components/layouts/LayoutAdmin.jsx";
 import HomeAdmin from "./pages/Admin/HomeAdmin/HomeAdmin.jsx";
 import CreateRent from "./pages/Admin/CreateRent/CreateRent.jsx";
 import ChangePassword from "./pages/ChangePassword/ChangePassword.jsx";
+import RentHistory from "./pages/RentHistory/RentHistory.jsx";
+import LikedCars from "./pages/LikedCars/LikedCars.jsx";
+
 
 function App() {
   return (
@@ -50,6 +53,12 @@ function App() {
 
               {/* Thanh toán */}
               <Route path="/payment/:id" element={<Billing />} />
+
+              {/* Lịch sử thuê xe */}
+              <Route path="/history" element={<RentHistory />} />
+
+              {/* Danh sách xe đã thích */}
+              <Route path="/liked-cars" element={<LikedCars />} />
             </Route>
 
             <Route path="/admin" element={<LayoutAdmin />}>

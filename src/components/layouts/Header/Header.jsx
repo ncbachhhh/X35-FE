@@ -15,32 +15,45 @@ export default function Header() {
   const logout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    delete axios.defaults.headers.common['Authorization'];
+    delete axios.defaults.headers.common["Authorization"];
     setUser(null);
   };
 
   const handleSearch = (e) => {
-    if (e.key === "Enter") {
-      const query = e.target.value;
-      if (query === "") {
-        navigate("/category");
-      } else {
-        navigate(`/category?keyword=${query}`);
-      }
+    const query = e.target.value;
+    if (query === "") {
+      navigate("/category");
+    } else {
+      navigate(`/category?keyword=${query}`);
     }
   };
 
   const menu = (
     <Menu>
-      <Menu.Item key="change-password" onClick={() => {
-        navigate("/auth/change-password");
-        setDropdownVisible(false);
-      }}>
+      <Menu.Item
+        key="history"
+        onClick={() => {
+          navigate("/history");
+          setDropdownVisible(false);
+        }}
+      >
+        Rent History
+      </Menu.Item>
+      <Menu.Item
+        key="change-password"
+        onClick={() => {
+          navigate("/auth/change-password");
+          setDropdownVisible(false);
+        }}
+      >
         Change Password
       </Menu.Item>
-      <Menu.Item key="logout" onClick={() => {
-        logout();
-      }}>
+      <Menu.Item
+        key="logout"
+        onClick={() => {
+          logout();
+        }}
+      >
         Logout
       </Menu.Item>
     </Menu>
@@ -55,43 +68,34 @@ export default function Header() {
           </div>
           {!loading && user && (
             <div className="header-search">
-              <Input
-                placeholder="Search something here"
-                onKeyDown={handleSearch}
-                prefix={<SearchOutlined style={{ color: "#aaa" }} />}
-              />
+              <Input placeholder="Search something here" onPressEnter={handleSearch} prefix={<SearchOutlined style={{ color: "#aaa" }} />} />
             </div>
           )}
         </div>
 
-        {!loading &&
-          (user ? (
-            <div className="header-right">
-              <div className="header-like header-right-item">
-                <i className="fa-solid fa-heart"></i>
-              </div>
-              <div className="header-notification header-right-item">
-                <i className="fa-solid fa-bell"></i>
-              </div>
-              <div className="header-setting header-right-item">
-                <i className="fa-solid fa-gear"></i>
-              </div>
-
-              {/* 👤 Dropdown for user menu */}
-              <Dropdown
-                overlay={menu}
-                trigger={['click']}
-                onVisibleChange={(visible) => setDropdownVisible(visible)}
-                visible={isDropdownVisible}
-              >
-                <div className="header-user header-right-item" onClick={() => setDropdownVisible(!isDropdownVisible)}>
-                  <i className="fa-solid fa-user"></i>
-                </div>
-              </Dropdown>
+        {!loading && user ? (
+          <div className="header-right">
+            <div className="header-like header-right-item" onClick={() => navigate("/liked-cars")}>
+              <i className="fa-solid fa-heart"></i>
             </div>
-          ) : (
-            <ButtonUI content="Get Started" navigate="/auth/login" />
-          ))}
+            <div className="header-notification header-right-item">
+              <i className="fa-solid fa-bell"></i>
+            </div>
+            {/* 👤 Dropdown for user menu */}
+            <Dropdown
+              menu={menu}
+              trigger={["click"]}
+              onOpenChange={(open) => setDropdownVisible(open)} // dùng onOpenChange
+              open={isDropdownVisible} // dùng open thay vì visible
+            >
+              <div className="header-user header-right-item">
+                <i className="fa-solid fa-user"></i>
+              </div>
+            </Dropdown>
+          </div>
+        ) : (
+          <ButtonUI content="Get Started" navigate="/auth/login" />
+        )}
       </div>
     </div>
   );

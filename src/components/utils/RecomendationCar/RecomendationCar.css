@@ -14,8 +14,8 @@
 .recomendation-car-listing {
   display: grid;
   justify-content: space-between;
-  grid-template-columns: repeat(4, 1fr);
   gap: 32px;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .show-more {

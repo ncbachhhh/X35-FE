@@ -1,55 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./PopularCar.css";
 import CarCard from "../../ui/CarCard/CarCard.jsx";
 import { useNavigate } from "react-router-dom";
+import CarAPI from "../../../APIs/car.api.js";
 
 export default function PopularCar() {
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
 
-  // Fake data
-  const data = [
-    {
-      id: 1,
-      name: "CR-V",
-      type: "SUV",
-      tank: "80",
-      gearbox: "Automatic",
-      seats: 4,
-      price: 80,
-      image: ["/assets/image 7.png"],
-    },
-    {
-      id: 2,
-      name: "Civic",
-      type: "SUV",
-      tank: "80",
-      gearbox: "Automatic",
-      seats: 4,
-      price: 20,
-      image: ["/assets/image 8.png"],
-    },
-    {
-      id: 3,
-      name: "CR-V",
-      type: "SUV",
-      tank: "80",
-      gearbox: "Automatic",
-      seats: 4,
-      price: 40,
-      image: ["/assets/image 7.png"],
-    },
-    {
-      id: 4,
-      name: "Civic",
-      type: "SUV",
-      tank: "80",
-      gearbox: "Automatic",
-      seats: 4,
-      price: 90,
-      image: ["/assets/image 8.png"],
-    },
-  ];
+  const getPopularCar = async () => {
+    const response = await CarAPI.getCarPopular();
+    if (response.isSuccess) {
+      setData(response.data);
+    } else {
+      console.log(response.message);
+    }
+  };
 
+  useEffect(() => {
+    getPopularCar();
+  }, []);
+  
   return (
     <div className="popular-car-container">
       {/* Tiêu đề */}
@@ -63,7 +34,7 @@ export default function PopularCar() {
       {/* Danh sách xe */}
       <div className="popular-car-listing">
         {data.map((car) => {
-          return <CarCard car={car} key={car.id} />;
+          return <CarCard car={car} key={car._id} />;
         })}
       </div>
     </div>
