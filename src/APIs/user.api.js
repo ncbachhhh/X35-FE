@@ -16,6 +16,7 @@ const API_URL = {
   GET_RENT_HISTORY: `${URL}/rented-cars`,
   RETURN_CAR: `${URL}/return-car`,
   GET_LIKE_CARS: `${URL}/liked-cars`,
+  GET_USER_LIST: `${URL}/user_list`,
 };
 
 const UserAPI = {
@@ -214,6 +215,27 @@ const UserAPI = {
       return {
         isSuccess: false,
         message: err.response.data.message,
+      };
+    }
+  },
+
+  getUserList: async (page, pageSize) => {
+    try {
+      const response = await authorizedAxios().post(API_URL.GET_USER_LIST, {
+        page: page,
+        limit: pageSize,
+      });
+      return {
+        isSuccess: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (error) {
+      console.error("❌ Get user list failed:", error);
+      return {
+        isSuccess: false,
+        data: null,
+        message: error.response.data.message,
       };
     }
   },

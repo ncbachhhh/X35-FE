@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Layout from "./components/layouts/Layout.jsx";
+
 import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Login/Login.jsx";
 import Signup from "./pages/Signup/Signup.jsx";
@@ -17,7 +17,8 @@ import CreateRent from "./pages/Admin/CreateRent/CreateRent.jsx";
 import ChangePassword from "./pages/ChangePassword/ChangePassword.jsx";
 import RentHistory from "./pages/RentHistory/RentHistory.jsx";
 import LikedCars from "./pages/LikedCars/LikedCars.jsx";
-
+import UserList from "./pages/Admin/UserList/UserList.jsx";
+import Layout from "./components/layouts/Layout.jsx";
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
             <Route path="/admin" element={<LayoutAdmin />}>
               <Route path="" element={<HomeAdmin />} />
               <Route path="create-rent" element={<CreateRent />} />
+              <Route path="user-list" element={<UserList />} />
             </Route>
 
             <Route path="*" element={<h1>404 Not Found</h1>} />

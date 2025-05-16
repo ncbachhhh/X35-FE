@@ -18,6 +18,10 @@ export default function SidebarAdmin({ page, setPage }) {
         <i class="fa-solid fa-pen-to-square"></i>
         <span>Create Rent</span>
       </div>
+      <div className="sidebar-admin-item" style={{ color: page === 3 ? "white" : "#90A3BF", scale: page === 3 && "1.05", backgroundColor: page === 3 && "#3563E9" }} onClick={() => handleClick(3, '/admin/user-list')}>
+        <i className="fa-solid fa-comments"></i>
+        <span className="sidebar-admin-title">User List</span>
+      </div>
     </div>
   );
 }
