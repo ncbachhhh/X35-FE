@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input, Menu, Dropdown, Modal } from "antd";
+import { Input, Dropdown } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
@@ -17,6 +17,8 @@ export default function Header() {
     localStorage.removeItem("refreshToken");
     delete axios.defaults.headers.common["Authorization"];
     setUser(null);
+    setDropdownVisible(false);
+    navigate("/auth/login"); // Điều hướng sau logout
   };
 
   const handleSearch = (e) => {
@@ -28,36 +30,30 @@ export default function Header() {
     }
   };
 
-  const menu = (
-    <Menu>
-      <Menu.Item
-        key="history"
-        onClick={() => {
-          navigate("/history");
-          setDropdownVisible(false);
-        }}
-      >
-        Rent History
-      </Menu.Item>
-      <Menu.Item
-        key="change-password"
-        onClick={() => {
-          navigate("/auth/change-password");
-          setDropdownVisible(false);
-        }}
-      >
-        Change Password
-      </Menu.Item>
-      <Menu.Item
-        key="logout"
-        onClick={() => {
-          logout();
-        }}
-      >
-        Logout
-      </Menu.Item>
-    </Menu>
-  );
+  // Chuyển Menu JSX thành array items theo AntD v5+
+  const items = [
+    {
+      key: "history",
+      label: "Rent History",
+      onClick: () => {
+        navigate("/history");
+        setDropdownVisible(false);
+      },
+    },
+    {
+      key: "change-password",
+      label: "Change Password",
+      onClick: () => {
+        navigate("/auth/change-password");
+        setDropdownVisible(false);
+      },
+    },
+    {
+      key: "logout",
+      label: "Logout",
+      onClick: logout,
+    },
+  ];
 
   return (
     <div className="header-container">
@@ -82,15 +78,10 @@ export default function Header() {
               <i className="fa-solid fa-bell"></i>
             </div>
             {/* 👤 Dropdown for user menu */}
-            <Dropdown
-              menu={menu}
-              trigger={["click"]}
-              onOpenChange={(open) => setDropdownVisible(open)} // dùng onOpenChange
-              open={isDropdownVisible} // dùng open thay vì visible
-            >
-              <div className="header-user header-right-item">
+            <Dropdown menu={{ items }} trigger={["click"]} onOpenChange={(open) => setDropdownVisible(open)} open={isDropdownVisible}>
+              <span className="header-user header-right-item" style={{ cursor: "pointer" }}>
                 <i className="fa-solid fa-user"></i>
-              </div>
+              </span>
             </Dropdown>
           </div>
         ) : (
