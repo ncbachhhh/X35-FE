@@ -19,6 +19,8 @@ const API_URL = {
   GET_USER_LIST: `${URL}/user_list`,
   UPDATE_USER: `${URL}/update`,
   DELETE_USER: `${URL}/delete`,
+  GET_NEW_USERS_BY_DATE: `${URL}/new-users-by-date`,
+  GET_REVENUE_BY_MONTH: `${URL}/revenue-by-month`,
 };
 
 const UserAPI = {
@@ -272,6 +274,66 @@ const UserAPI = {
       return {
         isSuccess: false,
         message: error.response.data.message,
+      };
+    }
+  },
+
+  getNewUsersByDate: async (startDate, endDate) => {
+    try {
+      const params = {};
+      if (startDate) params.startDate = startDate;
+      if (endDate) params.endDate = endDate;
+
+      const response = await authorizedAxios().get(API_URL.GET_NEW_USERS_BY_DATE, { params });
+
+      if (response.status === 200) {
+        return {
+          isSuccess: true,
+          data: response.data.data,
+          message: response.data.message,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          data: null,
+          message: response.data.message || "Failed to fetch user stats",
+        };
+      }
+    } catch (error) {
+      return {
+        isSuccess: false,
+        data: null,
+        message: error.response?.data?.message || error.message || "Error fetching user stats",
+      };
+    }
+  },
+
+  getRevenueByMonth: async (startDate, endDate) => {
+    try {
+      const params = {};
+      if (startDate) params.startDate = startDate;
+      if (endDate) params.endDate = endDate;
+
+      const response = await authorizedAxios().get(API_URL.GET_REVENUE_BY_MONTH, { params });
+
+      if (response.status === 200) {
+        return {
+          isSuccess: true,
+          data: response.data.data,
+          message: response.data.message,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          data: null,
+          message: response.data.message || "Failed to fetch revenue data",
+        };
+      }
+    } catch (error) {
+      return {
+        isSuccess: false,
+        data: null,
+        message: error.response?.data?.message || error.message || "Error fetching revenue data",
       };
     }
   },
