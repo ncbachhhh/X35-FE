@@ -6,8 +6,18 @@ import { useAuth } from "../../contexts/auth.context";
 
 export default function LayoutAdmin() {
   const [page, setPage] = useState(1);
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading) {
+      if (!user) {
+        navigate("/auth/login");
+      } else if (user.role !== "admin") {
+        navigate("/");
+      }
+    }
+  }, [user, loading, navigate]);
 
   return (
     <>

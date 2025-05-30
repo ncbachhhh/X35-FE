@@ -17,6 +17,8 @@ const API_URL = {
   RETURN_CAR: `${URL}/return-car`,
   GET_LIKE_CARS: `${URL}/liked-cars`,
   GET_USER_LIST: `${URL}/user_list`,
+  UPDATE_USER: `${URL}/update`,
+  DELETE_USER: `${URL}/delete`,
 };
 
 const UserAPI = {
@@ -235,6 +237,40 @@ const UserAPI = {
       return {
         isSuccess: false,
         data: null,
+        message: error.response.data.message,
+      };
+    }
+  },
+
+  updateUser: async (data) => {
+    try {
+      const response = await authorizedAxios().post(API_URL.UPDATE_USER, data);
+      return {
+        isSuccess: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (error) {
+      console.error("❌ Update user failed:", error);
+      return {
+        isSuccess: false,
+        data: null,
+        message: error.response.data.message,
+      };
+    }
+  },
+
+  deleteUser: async (id) => {
+    try {
+      const response = await authorizedAxios().post(API_URL.DELETE_USER, { id });
+      return {
+        isSuccess: true,
+        message: response.data.message,
+      };
+    } catch (error) {
+      console.error("❌ Delete user failed:", error);
+      return {
+        isSuccess: false,
         message: error.response.data.message,
       };
     }

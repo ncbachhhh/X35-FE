@@ -6,6 +6,7 @@ const URL = `${DOMAIN}/api/feedback`;
 
 const API_URL = {
   ADD_FEEDBACK: `${URL}/create`,
+  GET_FEEDBACK: `${URL}/car`,
 };
 
 const FeedbackAPI = {
@@ -23,6 +24,21 @@ const FeedbackAPI = {
       };
     }
   },
+  getFeedback: async (carId) => {
+    try {
+      const response = await axios.get(`${API_URL.GET_FEEDBACK}/${carId}`);
+      return {
+        isSuccess: true,
+        data: response.data.data,
+        message: response.data.message || "Feedback retrieved successfully",
+      }
+    } catch (error) {
+      return {
+        isSuccess: false,
+        message: error.response?.data?.message || "Failed to retrieve feedback",
+      }
+    }
+  }
 };
 
 export default FeedbackAPI;

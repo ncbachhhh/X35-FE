@@ -166,7 +166,7 @@ export default function CreateRent() {
           </Form.Item>
 
           <Form.Item
-            label="Daily Rental Price (Dollar)"
+            label="Daily Rental Price (VND)"
             name="price"
             rules={[{ required: true, message: "Please enter rental price!" }]}
           >

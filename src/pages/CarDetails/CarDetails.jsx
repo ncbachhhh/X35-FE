@@ -9,6 +9,7 @@ import CarAPI from "../../APIs/car.api";
 import Loading from "../../components/ui/Loading/Loading";
 import UserAPI from "../../APIs/user.api";
 import { useAuth } from "../../contexts/auth.context";
+import FeedbackAPI from "../../APIs/feedback.api";
 
 const { Paragraph } = Typography;
 
@@ -54,6 +55,7 @@ export default function CarDetails() {
   const [mainImage, setMainImage] = useState();
   const [images, setImages] = useState([]);
   const [showAll, setShowAll] = useState(false);
+  const [comments, setComments] = useState([]);
   const [comment, setComment] = useState(comments.slice(0, 2));
   const [loading, setLoading] = useState(false);
   const [carRecommend, setRecommend] = useState([]);
@@ -96,6 +98,14 @@ export default function CarDetails() {
     }
   };
 
+  const getCarComments = async (id) => {
+    const response = await FeedbackAPI.getFeedback(id);
+    if (response.isSuccess) {
+      setComments(response.data);
+      setComment(response.data.slice(0, 2));
+    }
+  };
+
   useEffect(() => {
     getCarDetails();
     getCarRecommend();
@@ -103,6 +113,7 @@ export default function CarDetails() {
 
   useEffect(() => {
     getCarRecent();
+    getCarComments(car._id);
   }, [car]);
 
   return (
@@ -186,21 +197,32 @@ export default function CarDetails() {
               Reviews <span>{comments.length}</span>
             </div>
             {comment.map((comment) => (
-              <div key={comment.id} className="car-feedback-item">
+              <div key={comment._id} className="car-feedback-item">
                 <div className="car-feedback-image">
-                  <img src={comment.image} alt="" height={48} />
+                  <img src="/assets/Profill.svg" alt="" height={48} />
                 </div>
                 <div className="car-feedback-content">
                   <div>
                     <div>
-                      <p className="comment-user-name">{comment.name}</p>
+                      <p className="comment-user-name">{comment.user.fullname}</p>
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "5px", alignItems: "end" }}>
-                      <p style={{ fontSize: "14px", color: "#A0A3BD" }}>{comment.date}</p>
+                      <p style={{ fontSize: "14px", color: "#A0A3BD" }}>
+                        {comment.createdAt.toLocaleString("vi-VN", {
+                          timeZone: "Asia/Ho_Chi_Minh",
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                          hour12: false,
+                        })}
+                      </p>
                       <Rate allowHalf disabled defaultValue={comment.rate} />
                     </div>
                   </div>
-                  <p className="comment-content">{comment.content}</p>
+                  <p className="comment-content">{comment.comment}</p>
                 </div>
               </div>
             ))}

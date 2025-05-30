@@ -28,8 +28,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getProfile();
-    setLoading(false);
+    const fetchProfile = async () => {
+      await getProfile();
+      setLoading(false);
+    };
+    fetchProfile();
   }, []);
 
   return <AuthContext.Provider value={{ user, setUser, loading, setLoading, getProfile }}>{children}</AuthContext.Provider>;
